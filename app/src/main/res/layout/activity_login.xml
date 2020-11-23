@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data class="LoginDataBinding">
+
+        <import type="android.view.View" />
+
+        <import type="android.text.InputType" />
+
+        <variable
+            name="viewModel"
+            type="com.isuo.inspection.application.ui.login.LoginViewModel" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorWhite">
+
+        <LinearLayout
+            android:id="@+id/login_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            tools:context=".ui.login.LoginActivity">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="60dp"
+                    android:text="欢迎使用金牌电工"
+                    android:textColor="@color/text_black"
+                    android:textSize="25sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="15dp"
+                    android:text="工作自由 财务自由"
+                    android:textColor="#ff999999"
+                    android:textSize="16sp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="39dp"
+                    android:layout_marginRight="20dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                         />
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="44dp"
+                        android:layout_marginLeft="12dp"
+                        android:afterTextChanged="@{viewModel.textChange}"
+                        android:background="@color/colorWhite"
+                        android:hint="请输入手机号"
+                        android:inputType="phone"
+                        android:maxLength="11"
+                        android:text="@={viewModel.name}"
+                        android:textColor="@color/text_black"
+                        android:textColorHint="#FFBBBBBB"
+                        android:textSize="@dimen/sp_14" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:background="@color/color_divide" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginRight="20dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <FrameLayout
+                        android:layout_width="0dp"
+                        android:layout_height="44dp"
+                        android:layout_marginLeft="12dp"
+                        android:layout_weight="1">
+
+                        <androidx.appcompat.widget.AppCompatEditText
+                            android:id="@+id/et_code"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@color/colorWhite"
+                            android:hint="@string/login_hit_use_code"
+                            android:inputType="number"
+                            android:text="@={viewModel.pass}"
+                            android:textColor="@color/text_black"
+                            android:textColorHint="#FFBBBBBB"
+                            android:textSize="@dimen/sp_14"
+                            android:visibility="@{viewModel.isPassToLogin()?View.GONE:View.VISIBLE}" />
+
+                        <androidx.appcompat.widget.AppCompatEditText
+                            android:id="@+id/et_pass"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@color/colorWhite"
+                            android:hint="@string/login_hit_use_pass"
+                            android:inputType="textPassword"
+                            android:text="@={viewModel.pass}"
+                            android:textColor="@color/text_black"
+                            android:textColorHint="#FFBBBBBB"
+                            android:textSize="@dimen/sp_14"
+                            android:visibility="@{viewModel.isPassToLogin()?View.VISIBLE:View.GONE}"
+                            tools:text="xxx" />
+
+                    </FrameLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:visibility="@{viewModel.isPassToLogin?View.GONE:View.VISIBLE}"
+                        tools:visibility="visible">
+
+                        <View
+                            android:layout_width="1px"
+                            android:layout_height="10dp"
+                            android:layout_marginRight="10dp"
+                            android:background="#FFCCCCCC" />
+
+                        <TextView
+                            android:layout_width="80dp"
+                            android:layout_height="match_parent"
+                            android:enabled="@{viewModel.canGetCode}"
+                            android:gravity="center"
+                            android:text="@{viewModel.getCodeText}"
+                            android:textColor="#ffbbbbbb"
+                            android:textSize="14sp"
+                            tools:text="获取验证码" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:background="@color/color_divide" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:onClick="@{()->viewModel.forgetPass()}"
+                        android:paddingTop="12dp"
+                        android:paddingBottom="12dp"
+                        android:text="忘记密码?"
+                        android:textColor="#ff888888"
+                        android:textSize="12sp"
+                        android:visibility="@{viewModel.isPassToLogin?View.VISIBLE:View.GONE}" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:onClick="@{()->viewModel.changeLoginState()}"
+                        android:paddingTop="12dp"
+                        android:paddingBottom="12dp"
+                        android:text="@{viewModel.isPassToLogin()?@string/login_use_code:@string/login_use_pass}"
+                        android:textColor="#ffff9000"
+                        android:textSize="12sp"
+                        tools:text="@string/login_use_code" />
+                </RelativeLayout>
+
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="54dp"
+                    android:layout_marginRight="20dp"
+                    android:elevation="0dp"
+                    android:enabled="@{viewModel.canClick}"
+                    android:gravity="center"
+                    android:onClick="@{() -> viewModel.toLogin()}"
+                    android:text="@string/login"
+                    android:textSize="16sp"
+                    app:button_disabled_bg="@{@drawable/button_disabled_gray}"
+                    app:button_enable="@{viewModel.canClick}"
+                    app:button_enable_bg="@{@drawable/button_enable_common}"
+                    app:toast="@{viewModel.toastStr}" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:visibility="invisible">
+
+                    <View
+                        android:layout_width="70dp"
+                        android:layout_height="1px"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="10dp"
+                        android:layout_toLeftOf="@+id/text_1"
+                        android:background="#FFCCCCCC" />
+
+                    <TextView
+                        android:id="@+id/text_1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:text="其他登录方式"
+                        android:textColor="#ffaaaaaa"
+                        android:textSize="12sp" />
+
+                    <View
+                        android:layout_width="70dp"
+                        android:layout_height="1px"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="10dp"
+                        android:layout_toRightOf="@+id/text_1"
+                        android:background="#FFCCCCCC" />
+
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:onClick="showInfo"
+                    android:orientation="horizontal"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="登录即代表你同意"
+                        android:textColor="#ff888888"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="《平台使用协议及隐私条款》"
+                        android:textColor="#ff00a0ff"
+                        android:textSize="12sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <androidx.core.widget.ContentLoadingProgressBar
+            style="?android:progressBarStyleLargeInverse"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="300dp"
+            android:visibility="@{viewModel.isLoading()?View.VISIBLE:View.GONE}" />
+
+    </RelativeLayout>
+
+
+</layout>

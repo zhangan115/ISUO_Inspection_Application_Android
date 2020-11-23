@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data class="SplashDataBinding">
+
+        <variable
+            name="vm"
+            type="com.isuo.inspection.application.ui.splash.SplashViewModel" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorWhite"
+        tools:context=".ui.splash.SplashActivity">
+
+        <ImageView
+            android:id="@+id/icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"
+            android:layout_marginTop="116dp"
+            android:src="@mipmap/ic_launcher" />
+
+        <TextView
+            android:id="@+id/text_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/icon"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="18dp"
+            android:text="@string/app_name"
+            android:textColor="#ff333333"
+            android:textSize="25sp" />
+
+        <TextView
+            android:id="@+id/text_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/text_1"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="15dp"
+            android:text="专业电工急速共享平台，更快，更专业！"
+            android:textColor="#ff888888"
+            android:textSize="14sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="50dp"
+            android:text="Copyright © 2020 Xi'an Sitech Electric Co.,Ltd"
+            android:textColor="#ff888888"
+            android:textSize="13sp" />
+
+    </RelativeLayout>
+</layout>

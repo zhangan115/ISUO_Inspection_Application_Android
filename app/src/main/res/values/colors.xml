@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#006569</color>
+    <color name="colorPrimaryDark">#006569</color>
+    <color name="colorAccent">#03DAC5</color>
+    <color name="colorWhite">@android:color/white</color>
+
+    <color name="gray_divide">#cccccc</color>
+    <color name="dialog_hint">#888888</color>
+    <color name="dialog_cancel">#454545</color>
+    <color name="dialog_title">#666666</color>
+    <color name="bg_color">#ffffff</color>
+
+    <color name="buttonEnableColor">#333333</color>
+    <color name="buttonDisabledColor">#F6F6F6</color>
+    <color name="colorTransparent">#00FFFFFF</color>
+
+    <color name="text_label">@color/dialog_cancel</color>
+    <color name="text_black">@color/buttonEnableColor</color>
+    <color name="color_divide">#e6e6e6</color>
+</resources>
