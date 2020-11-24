@@ -11,11 +11,7 @@ import com.isuo.inspection.application.model.bean.UserModel
 import com.isuo.inspection.application.repository.UserRepository
 import com.isuo.inspection.application.utils.Event
 import com.isuo.inspection.application.utils.PhoneFormatCheckUtils
-
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.launch
 import retrofit2.Call
 
 class LoginViewModel(private val userRepository: UserRepository) : ViewModel() {
@@ -34,7 +30,7 @@ class LoginViewModel(private val userRepository: UserRepository) : ViewModel() {
     val toLoginEvent: LiveData<Event<Unit>> = _toLoginEvent
 
     fun textChange(s: Editable) {
-//        canClick.value = !TextUtils.isEmpty(name.value) && !TextUtils.isEmpty(pass.value)
+        canClick.value = !TextUtils.isEmpty(name.value) && !TextUtils.isEmpty(pass.value)
     }
 
     private var okHttpManager = OkHttpManager<UserModel>()
@@ -94,17 +90,6 @@ class LoginViewModel(private val userRepository: UserRepository) : ViewModel() {
 
     fun forgetPass() {
         _toForgetPassEvent.value = Event(Unit)
-    }
-
-    private val _toOtherEvent = MutableLiveData<Event<Boolean>>()
-    val toOtherEvent: LiveData<Event<Boolean>> = _toOtherEvent
-
-    fun toWinXinLogin() {
-        _toOtherEvent.value = Event(false)
-    }
-
-    fun toZhiFuBaoLogin() {
-        _toOtherEvent.value = Event(true)
     }
 
     override fun onCleared() {

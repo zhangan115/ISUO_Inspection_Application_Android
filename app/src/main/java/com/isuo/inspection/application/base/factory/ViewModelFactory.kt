@@ -24,6 +24,7 @@ import com.isuo.inspection.application.repository.DataRepository
 import com.isuo.inspection.application.repository.TaskRepository
 import com.isuo.inspection.application.repository.UserRepository
 import com.isuo.inspection.application.ui.login.LoginViewModel
+import com.isuo.inspection.application.ui.main.MainViewModel
 import com.isuo.inspection.application.ui.splash.SplashViewModel
 
 /**
@@ -43,10 +44,13 @@ class ViewModelFactory constructor(
         modelClass: Class<T>,
         handle: SavedStateHandle
     ) = with(modelClass) {
-        when {    isAssignableFrom(LoginViewModel::class.java) ->
-            LoginViewModel(userRepository)
+        when {
+            isAssignableFrom(LoginViewModel::class.java) ->
+                LoginViewModel(userRepository)
             isAssignableFrom(SplashViewModel::class.java) ->
                 SplashViewModel(userRepository)
+            isAssignableFrom(MainViewModel::class.java) ->
+                MainViewModel(userRepository,taskRepository)
             else ->
                 throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
         }

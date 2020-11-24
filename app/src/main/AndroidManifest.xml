@@ -25,7 +25,7 @@
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="nosensor"
             android:taskAffinity="${TASK_AFFINITY_VALUE}"
-            android:theme="@style/AppTheme.NoActionBar"
+            android:theme="@style/AppTheme.NoActionBar.White"
             android:windowSoftInputMode="adjustPan|stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -40,7 +40,7 @@
             android:launchMode="singleTask"
             android:screenOrientation="nosensor"
             android:taskAffinity="${TASK_AFFINITY_VALUE}"
-            android:theme="@style/AppTheme.NoActionBar"
+            android:theme="@style/AppTheme.NoActionBar.White"
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
             android:name=".ui.main.MainActivity"
