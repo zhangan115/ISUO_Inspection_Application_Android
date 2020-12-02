@@ -12,6 +12,7 @@
     <string name="reload">重新加载</string>
     <string name="no_data_str">暂无数据</string>
     <string name="login">登录</string>
+    <string name="save">保存</string>
     <string name="login_use_pass">使用密码登录</string>
     <string name="login_use_code">使用验证码登录</string>
     <string name="login_hit_use_code">请输入验证码</string>

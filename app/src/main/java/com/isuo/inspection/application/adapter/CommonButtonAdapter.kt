@@ -1,6 +1,5 @@
 package com.isuo.inspection.application.adapter
 
-import android.graphics.drawable.Drawable
 import android.view.Gravity
 import android.widget.Button
 import androidx.databinding.BindingAdapter
@@ -10,24 +9,23 @@ object CommonButtonAdapter {
 
     @JvmStatic
     @BindingAdapter(
-        "app:button_enable_bg",
-        "app:button_disabled_bg",
-        "app:button_enable"
+        "app:button_common_enable"
     )
-    fun bindYellowButton(
+    fun bindCommonButton(
         button: Button,
-        enableBg: Drawable?,
-        disableBg: Drawable?,
-        isEnable: Boolean = false
+        isCommonEnable: Boolean = false
     ) {
-        button.isEnabled = isEnable
+        button.textSize = 16f
+        button.isEnabled = isCommonEnable
         button.gravity = Gravity.CENTER
-        if (isEnable) {
-            button.background = enableBg
-            button.setTextColor(button.context.resources.getColor(R.color.buttonEnableColor))
+        if (isCommonEnable) {
+            button.background =
+                button.context.resources.getDrawable(R.drawable.button_enable_common, null)
+            button.setTextColor(button.context.resources.getColor(R.color.button_enable_text))
         } else {
-            button.background = disableBg
-            button.setTextColor(button.context.resources.getColor(R.color.buttonDisabledColor))
+            button.background =
+                button.context.resources.getDrawable(R.drawable.button_disabled_gray, null)
+            button.setTextColor(button.context.resources.getColor(R.color.button_disabled_text))
         }
     }
 }

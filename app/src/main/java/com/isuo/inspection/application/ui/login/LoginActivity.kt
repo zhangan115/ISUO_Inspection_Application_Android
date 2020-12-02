@@ -12,6 +12,7 @@ import com.isuo.inspection.application.base.AbsBaseActivity
 import com.isuo.inspection.application.base.ext.getViewModelFactory
 import com.isuo.inspection.application.common.ConstantStr
 import com.isuo.inspection.application.databinding.LoginDataBinding
+import com.isuo.inspection.application.ui.login.forget_pass.ForgetPassActivity
 import com.isuo.inspection.application.ui.main.MainActivity
 import com.isuo.inspection.application.utils.EventObserver
 
@@ -31,6 +32,9 @@ class LoginActivity : AbsBaseActivity<LoginDataBinding>() {
             showMainActivity()
         })
         viewModel.toForgetPassEvent.observe(this, EventObserver {
+            startActivity(Intent(this, ForgetPassActivity::class.java))
+        })
+        viewModel.toShowAgreeEvent.observe(this, EventObserver {
 
         })
     }

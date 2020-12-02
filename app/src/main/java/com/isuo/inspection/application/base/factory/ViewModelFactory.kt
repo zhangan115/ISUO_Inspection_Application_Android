@@ -24,6 +24,7 @@ import com.isuo.inspection.application.repository.DataRepository
 import com.isuo.inspection.application.repository.TaskRepository
 import com.isuo.inspection.application.repository.UserRepository
 import com.isuo.inspection.application.ui.login.LoginViewModel
+import com.isuo.inspection.application.ui.login.forget_pass.ForgetPassViewModel
 import com.isuo.inspection.application.ui.main.MainViewModel
 import com.isuo.inspection.application.ui.splash.SplashViewModel
 
@@ -51,6 +52,8 @@ class ViewModelFactory constructor(
                 SplashViewModel(userRepository)
             isAssignableFrom(MainViewModel::class.java) ->
                 MainViewModel(userRepository,taskRepository)
+            isAssignableFrom(ForgetPassViewModel::class.java) ->
+                ForgetPassViewModel(userRepository)
             else ->
                 throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
         }

@@ -43,6 +43,15 @@
             android:theme="@style/AppTheme.NoActionBar.White"
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
+            android:name=".ui.login.forget_pass.ForgetPassActivity"
+            android:allowTaskReparenting="true"
+            android:configChanges="orientation|keyboardHidden"
+            android:launchMode="singleTask"
+            android:screenOrientation="nosensor"
+            android:taskAffinity="${TASK_AFFINITY_VALUE}"
+            android:theme="@style/AppTheme.NoActionBar.White"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
             android:name=".ui.main.MainActivity"
             android:allowTaskReparenting="true"
             android:configChanges="orientation|keyboardHidden"

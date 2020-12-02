@@ -2,6 +2,7 @@ package com.isuo.inspection.application.ui.login
 
 import android.text.Editable
 import android.text.TextUtils
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -18,11 +19,8 @@ class LoginViewModel(private val userRepository: UserRepository) : ViewModel() {
 
     var name: MutableLiveData<String> = MutableLiveData()
     var pass: MutableLiveData<String> = MutableLiveData()
-    var getCodeText: MutableLiveData<String> = MutableLiveData("获取验证码")
     val isLoading = MutableLiveData<Boolean>()
-    val canClick = MutableLiveData(true)
-    val canGetCode = MutableLiveData(true)
-    val isPassToLogin = MutableLiveData(false)
+    val canClick = MutableLiveData(false)
     var toastStr: MutableLiveData<String> = MutableLiveData()
 
     //登陆
@@ -34,7 +32,6 @@ class LoginViewModel(private val userRepository: UserRepository) : ViewModel() {
     }
 
     private var okHttpManager = OkHttpManager<UserModel>()
-    private var okHttpManagerCode = OkHttpManager<String>()
 
     fun toLogin() {
         if (TextUtils.isEmpty(name.value)) {
@@ -42,11 +39,7 @@ class LoginViewModel(private val userRepository: UserRepository) : ViewModel() {
             return
         }
         if (TextUtils.isEmpty(pass.value)) {
-            if (isPassToLogin.value!!) {
-                toastStr.value = "请输入密码"
-            } else {
-                toastStr.value = "请输入验证码"
-            }
+            toastStr.value = "请输入密码"
             return
         }
         val name = name.value!!
@@ -57,7 +50,7 @@ class LoginViewModel(private val userRepository: UserRepository) : ViewModel() {
         }
         isLoading.value = true
         val cell: Call<BaseEntity<UserModel>>?
-        cell =   userRepository.userLogin(name, pass)
+        cell = userRepository.userLogin(name, pass)
 
         okHttpManager.requestDataWithNotLogin(cell, {
             isLoading.value = false
@@ -72,17 +65,12 @@ class LoginViewModel(private val userRepository: UserRepository) : ViewModel() {
         })
     }
 
-    var getCodeJob: Job? = null
-    private val userPostCidManager = OkHttpManager<String>()
+    //登陆
+    private val _toShowAgreeEvent = MutableLiveData<Event<Unit>>()
+    val toShowAgreeEvent: LiveData<Event<Unit>> = _toShowAgreeEvent
 
-
-    private val _toChangeSateEvent = MutableLiveData<Event<Boolean>>()
-    val toChangeSateEvent: LiveData<Event<Boolean>> = _toChangeSateEvent
-
-    fun changeLoginState() {
-        isPassToLogin.value = !isPassToLogin.value!!
-        pass.value = ""
-        _toChangeSateEvent.value = Event(isPassToLogin.value!!)
+    fun showAgreeWeb() {
+        _toShowAgreeEvent.value = Event(Unit)
     }
 
     private val _toForgetPassEvent = MutableLiveData<Event<Unit>>()
@@ -95,9 +83,6 @@ class LoginViewModel(private val userRepository: UserRepository) : ViewModel() {
     override fun onCleared() {
         super.onCleared()
         okHttpManager.destroyCall()
-        okHttpManagerCode.destroyCall()
-        userPostCidManager.destroyCall()
-        getCodeJob?.cancel()
     }
 
 }

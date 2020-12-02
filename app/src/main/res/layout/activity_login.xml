@@ -106,6 +106,7 @@
                             android:id="@+id/et_pass"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
+                            android:afterTextChanged="@{viewModel.textChange}"
                             android:background="@color/colorWhite"
                             android:hint="@string/login_hit_use_pass"
                             android:inputType="textPassword"
@@ -139,29 +140,23 @@
                         android:paddingBottom="12dp"
                         android:text="忘记密码?"
                         android:textColor="#ff888888"
-                        android:textSize="12sp"
-                        android:visibility="@{viewModel.isPassToLogin?View.VISIBLE:View.GONE}" />
+                        android:textSize="12sp" />
 
                 </RelativeLayout>
 
 
                 <Button
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="44dp"
                     android:layout_marginLeft="20dp"
-                    android:layout_marginTop="54dp"
+                    android:layout_marginTop="60dp"
                     android:layout_marginRight="20dp"
                     android:elevation="0dp"
-                    android:enabled="@{viewModel.canClick}"
-                    android:gravity="center"
                     android:onClick="@{() -> viewModel.toLogin()}"
                     android:text="@string/login"
-                    android:textColor="@color/colorWhite"
-                    android:textSize="16sp"
-                    app:button_disabled_bg="@{@drawable/button_disabled_gray}"
-                    app:button_enable="@{viewModel.canClick}"
-                    app:button_enable_bg="@{@drawable/button_enable_common}"
+                    app:button_common_enable="@{viewModel.canClick}"
                     app:toast="@{viewModel.toastStr}" />
+
             </LinearLayout>
 
             <LinearLayout
@@ -189,6 +184,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:onClick="@{()->viewModel.showAgreeWeb()}"
                         android:text="《平台使用协议及隐私条款》"
                         android:textColor="#ff00a0ff"
                         android:textSize="12sp" />

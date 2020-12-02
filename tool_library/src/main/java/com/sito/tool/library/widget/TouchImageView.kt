@@ -476,10 +476,10 @@ class TouchImageView @JvmOverloads constructor(
     }
 
     private val imageWidth: Float
-        private get() = matchViewWidth * currentZoom
+        get() = matchViewWidth * currentZoom
 
     private val imageHeight: Float
-        private get() = matchViewHeight * currentZoom
+        get() = matchViewHeight * currentZoom
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         val drawable = drawable
