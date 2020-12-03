@@ -2,6 +2,7 @@ package com.isuo.inspection.application.app
 
 import android.app.Activity
 import android.app.Application
+import android.content.Intent
 import android.os.Build
 import android.os.StrictMode
 import android.text.TextUtils
@@ -13,6 +14,7 @@ import com.isuo.inspection.application.common.ConstantStr
 import com.isuo.inspection.application.repository.DataRepository
 import com.isuo.inspection.application.repository.TaskRepository
 import com.isuo.inspection.application.repository.UserRepository
+import com.isuo.inspection.application.ui.login.LoginActivity
 import com.qw.soul.permission.SoulPermission
 import com.scwang.smartrefresh.layout.SmartRefreshLayout
 import com.scwang.smartrefresh.layout.footer.ClassicsFooter
@@ -23,7 +25,11 @@ import okhttp3.Cookie
 import okhttp3.CookieJar
 import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
+import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.util.concurrent.TimeUnit
 
 open class ISUOApplication : Application() {
@@ -145,18 +151,18 @@ open class ISUOApplication : Application() {
                         }
                     }
                 })
-//            if (BuildConfig.DEBUG) {
-//                builder.addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.HEADERS))
-//                builder.addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
-//            }
-//            val okHttpClient = builder.build()
-//            retrofit = Retrofit.Builder()
-//                .baseUrl(BuildConfig.HOST)
-//                .client(okHttpClient)
-//                .addConverterFactory(ScalarsConverterFactory.create())
-//                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-//                .addConverterFactory(GsonConverterFactory.create())
-//                .build()
+            if (BuildConfig.DEBUG) {
+                builder.addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.HEADERS))
+                builder.addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
+            }
+            val okHttpClient = builder.build()
+            retrofit = Retrofit.Builder()
+                .baseUrl(BuildConfig.HOST)
+                .client(okHttpClient)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
         }
     }
 
@@ -221,18 +227,18 @@ open class ISUOApplication : Application() {
     fun needLogin() {
         SPHelper.remove(this, ConstantStr.USER_INFO, ConstantStr.NEED_LOGIN)
         SPHelper.remove(this, ConstantStr.USER_INFO, ConstantStr.USER_DATA)
-//        if (!isLoginOpen) {
-//            exitApp()
-//            if (activityList!!.size > 0) {
-//                val intent = Intent(this, LoginActivity::class.java)
-//                if (currentActivity() != null) {
-//                    currentActivity()!!.startActivity(intent)
-//                } else {
-//                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-//                    startActivity(intent)
-//                }
-//            }
-//        }
+        if (!isLoginOpen) {
+            exitApp()
+            if (activityList!!.size > 0) {
+                val intent = Intent(this, LoginActivity::class.java)
+                if (currentActivity() != null) {
+                    currentActivity()!!.startActivity(intent)
+                } else {
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                    startActivity(intent)
+                }
+            }
+        }
     }
 
     fun imageCacheFile(): String {

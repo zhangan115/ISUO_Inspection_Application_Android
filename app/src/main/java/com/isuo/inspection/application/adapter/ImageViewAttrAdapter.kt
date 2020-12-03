@@ -7,6 +7,7 @@ import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.isuo.inspection.application.app.ISUOApplication
+import com.sito.tool.library.utils.GlideUtils
 
 object ImageViewAttrAdapter {
 
@@ -44,6 +45,34 @@ object ImageViewAttrAdapter {
                 .error(errorDrawable)
                 .placeholder(holderDrawable)
                 .into(imageView)
+        }
+    }
+
+    @JvmStatic
+    @BindingAdapter("app:cirImageUrl", "app:cirPlaceHolder")
+    fun loadCirImage(
+        imageView: ImageView,
+        url: String?,
+        holderDrawable: Drawable?
+    ) {
+        if (TextUtils.isEmpty(url)) {
+            imageView.setImageDrawable(holderDrawable)
+            return
+        }
+        if (url!!.startsWith("http")) {
+            GlideUtils.ShowCircleImageWithContext(
+                imageView.context,
+                url,
+                imageView,
+                holderDrawable
+            )
+        } else {
+            GlideUtils.ShowCircleImageWithContext(
+                imageView.context,
+                ISUOApplication.appHost() + url,
+                imageView,
+                holderDrawable
+            )
         }
     }
 }

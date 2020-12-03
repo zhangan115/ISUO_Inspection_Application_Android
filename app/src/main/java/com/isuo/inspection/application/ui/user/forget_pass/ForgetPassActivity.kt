@@ -1,4 +1,4 @@
-package com.isuo.inspection.application.ui.login.forget_pass
+package com.isuo.inspection.application.ui.user.forget_pass
 
 import android.os.Bundle
 import androidx.activity.viewModels
@@ -6,6 +6,7 @@ import com.isuo.inspection.application.R
 import com.isuo.inspection.application.base.AbsBaseActivity
 import com.isuo.inspection.application.base.ext.getViewModelFactory
 import com.isuo.inspection.application.databinding.ForgetPassDataBinding
+import com.isuo.inspection.application.ui.user.user_info.UserInfoViewModel
 import com.isuo.inspection.application.utils.EventObserver
 
 class ForgetPassActivity : AbsBaseActivity<ForgetPassDataBinding>() {

@@ -1,4 +1,4 @@
-package com.isuo.inspection.application.ui.login.forget_pass
+package com.isuo.inspection.application.ui.user.forget_pass
 
 import android.text.Editable
 import android.text.TextUtils

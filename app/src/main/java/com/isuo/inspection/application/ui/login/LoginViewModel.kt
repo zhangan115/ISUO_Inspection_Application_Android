@@ -34,6 +34,8 @@ class LoginViewModel(private val userRepository: UserRepository) : ViewModel() {
     private var okHttpManager = OkHttpManager<UserModel>()
 
     fun toLogin() {
+        _toLoginEvent.value = Event(Unit)
+        return
         if (TextUtils.isEmpty(name.value)) {
             toastStr.value = "请输入手机号码"
             return
