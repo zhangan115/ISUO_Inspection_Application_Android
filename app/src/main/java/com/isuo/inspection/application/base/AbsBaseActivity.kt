@@ -43,7 +43,7 @@ abstract class AbsBaseActivity<T : ViewDataBinding> : BaseActivity() {
         dataBinding = DataBindingUtil.setContentView(this, getContentView())
         dataBinding.lifecycleOwner = this
         initData(savedInstanceState)
-        initToolBar(showClose)
+        initToolBar()
         initView(savedInstanceState)
         netWorkErrorLayout = findViewById(R.id.reload_tv)
         netWorkErrorLayout?.setOnClickListener {

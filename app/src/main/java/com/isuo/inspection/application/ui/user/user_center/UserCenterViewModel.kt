@@ -10,8 +10,8 @@ class UserCenterViewModel(val repository: UserRepository) : ViewModel() {
 
     var toastStr: MutableLiveData<String> = MutableLiveData()
 
-    var userName: MutableLiveData<String> = MutableLiveData()
-    var userPhone: MutableLiveData<String> = MutableLiveData()
+    var userName: MutableLiveData<String> = MutableLiveData("张三")
+    var userPhone: MutableLiveData<String> = MutableLiveData("18509259203")
     var userImageUrl: MutableLiveData<String> = MutableLiveData()
 
     private val _toShowUserInfo = MutableLiveData<Event<Unit>>()
@@ -47,7 +47,7 @@ class UserCenterViewModel(val repository: UserRepository) : ViewModel() {
     val toExitApp: LiveData<Event<Unit>> = _toExitApp
 
     fun toExitApp() {
-
+        _toExitApp.value = Event(Unit)
     }
 
 

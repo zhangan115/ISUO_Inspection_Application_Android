@@ -3,6 +3,9 @@ package com.isuo.inspection.application.ui.user.user_center
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
+import com.afollestad.materialdialogs.LayoutMode
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.bottomsheets.BottomSheet
 import com.isuo.inspection.application.R
 import com.isuo.inspection.application.app.ISUOApplication
 import com.isuo.inspection.application.base.AbsBaseActivity
@@ -34,7 +37,15 @@ class UserCenterActivity : AbsBaseActivity<UserCenterDataBinding>() {
 
         })
         viewModel.toExitApp.observe(this, EventObserver {
-            ISUOApplication.instance.needLogin()
+            MaterialDialog(this)
+                .show {
+                    this.message(null, "退出当前账号?")
+                    this.positiveButton(R.string.sure)
+                    this.negativeButton(R.string.cancel)
+                    this.positiveButton {
+                        ISUOApplication.instance.needLogin()
+                    }
+                }
         })
     }
 

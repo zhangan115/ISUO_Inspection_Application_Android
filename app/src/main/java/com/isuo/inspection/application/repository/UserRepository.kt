@@ -34,6 +34,7 @@ class UserRepository(private val content: Context) {
      * 设置登录状态
      */
     fun setLoginState(isLogin: Boolean) {
+        SPHelper.write(content, ConstantStr.APP_DATA, ConstantStr.USER_GUIDE, true)
         SPHelper.write(content, ConstantStr.USER_INFO, ConstantStr.NEED_LOGIN, isLogin)
     }
 

@@ -26,6 +26,10 @@ import com.isuo.inspection.application.repository.UserRepository
 import com.isuo.inspection.application.ui.login.LoginViewModel
 import com.isuo.inspection.application.ui.user.user_info.UserInfoViewModel
 import com.isuo.inspection.application.ui.main.MainViewModel
+import com.isuo.inspection.application.ui.main.check_item.SubCheckItemViewMode
+import com.isuo.inspection.application.ui.main.device_list.DeviceListViewModel
+import com.isuo.inspection.application.ui.main.input.InputViewModel
+import com.isuo.inspection.application.ui.main.search.SearchSubViewModel
 import com.isuo.inspection.application.ui.splash.SplashViewModel
 import com.isuo.inspection.application.ui.user.forget_pass.ForgetPassViewModel
 import com.isuo.inspection.application.ui.user.user_center.UserCenterViewModel
@@ -53,13 +57,21 @@ class ViewModelFactory constructor(
             isAssignableFrom(SplashViewModel::class.java) ->
                 SplashViewModel(userRepository)
             isAssignableFrom(MainViewModel::class.java) ->
-                MainViewModel(userRepository,taskRepository)
+                MainViewModel(userRepository, taskRepository)
             isAssignableFrom(ForgetPassViewModel::class.java) ->
                 ForgetPassViewModel(userRepository)
             isAssignableFrom(UserInfoViewModel::class.java) ->
                 UserInfoViewModel(userRepository)
             isAssignableFrom(UserCenterViewModel::class.java) ->
                 UserCenterViewModel(userRepository)
+            isAssignableFrom(SearchSubViewModel::class.java) ->
+                SearchSubViewModel(taskRepository)
+            isAssignableFrom(SubCheckItemViewMode::class.java) ->
+                SubCheckItemViewMode(taskRepository)
+            isAssignableFrom(DeviceListViewModel::class.java) ->
+                DeviceListViewModel(taskRepository)
+            isAssignableFrom(InputViewModel::class.java) ->
+                InputViewModel(taskRepository)
             else ->
                 throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
         }

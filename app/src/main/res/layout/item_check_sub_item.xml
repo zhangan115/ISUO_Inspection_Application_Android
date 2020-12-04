@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <import type="com.isuo.inspection.application.common.ConstantInt" />
+
+        <variable
+            name="checkItem"
+            type="com.isuo.inspection.application.model.bean.SubCheckItemBean" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="15dp"
+        android:background="@drawable/bg_common_white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/icon"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_marginLeft="10dp"
+            android:src="@mipmap/img_check_icon" />
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="15dp"
+            android:drawableRight="@mipmap/icon_next"
+            android:drawablePadding="5dp"
+            android:gravity="center_vertical"
+            android:text="@{checkItem.name}"
+            android:textColor="@color/text_title"
+            android:textSize="14sp"
+            tools:text="xxxxxxxxxxx" />
+    </LinearLayout>
+</layout>

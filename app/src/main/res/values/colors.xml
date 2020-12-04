@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#006569</color>
     <color name="colorPrimaryDark">#006569</color>
-    <color name="colorAccent">#03DAC5</color>
+    <color name="colorAccent">#006569</color>
     <color name="colorWhite">@android:color/white</color>
     <!--背景色-->
     <color name="colorCommonGreyBg">#F8F8F8</color>
@@ -38,5 +38,6 @@
     <color name="main_yellow_color">#ffe6b406</color>
     <color name="main_blue_color">#02948F</color>
     <color name="main_red_color">#D6011F</color>
+    <color name="line_select_color">#028A81</color>
 
 </resources>

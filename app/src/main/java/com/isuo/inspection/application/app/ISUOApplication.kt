@@ -119,7 +119,8 @@ open class ISUOApplication : Application() {
                         if (cookie != null) {
                             cookies.add(
                                 Cookie.Builder().domain(cookie!!.domain).name(
-                                    cookie!!.name).value(
+                                    cookie!!.name
+                                ).value(
                                     cookie!!.value
                                 ).build()
                             )
@@ -227,6 +228,7 @@ open class ISUOApplication : Application() {
     fun needLogin() {
         SPHelper.remove(this, ConstantStr.USER_INFO, ConstantStr.NEED_LOGIN)
         SPHelper.remove(this, ConstantStr.USER_INFO, ConstantStr.USER_DATA)
+        SPHelper.write(this, ConstantStr.USER_INFO, ConstantStr.NEED_LOGIN, false)
         if (!isLoginOpen) {
             exitApp()
             if (activityList!!.size > 0) {

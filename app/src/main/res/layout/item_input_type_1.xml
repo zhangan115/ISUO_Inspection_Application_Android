@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <import type="android.text.InputType" />
+
+        <variable
+            name="inputType1"
+            type="com.isuo.inspection.application.model.bean.InputType1" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@color/colorWhite"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:text="放电峰值"
+                android:textColor="@color/text_title"
+                android:textSize="15sp" />
+
+            <EditText
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="1"
+                android:afterTextChanged="@{inputType1.textChangeListener}"
+                android:background="@null"
+                android:gravity="right|center_vertical"
+                android:hint="请输入"
+                android:paddingRight="15dp"
+                android:text="@={inputType1.value1}"
+                android:textColor="@color/text_content"
+                android:textColorHint="@color/color_input_hint"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/gray_divide" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:text="背景峰值"
+                android:textColor="@color/text_title"
+                android:textSize="15sp" />
+
+            <EditText
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="1"
+                android:afterTextChanged="@{inputType1.textChangeListener}"
+                android:background="@null"
+                android:gravity="right|center_vertical"
+                android:hint="请输入"
+                android:paddingRight="15dp"
+                android:text="@={inputType1.value2}"
+                android:textColor="@color/text_content"
+                android:textColorHint="@color/color_input_hint"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/gray_divide" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:text="频率成分1"
+                android:textColor="@color/text_title"
+                android:textSize="15sp" />
+
+            <EditText
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="1"
+                android:afterTextChanged="@{inputType1.textChangeListener}"
+                android:background="@null"
+                android:gravity="right|center_vertical"
+                android:hint="请输入"
+                android:paddingRight="15dp"
+                android:text="@={inputType1.value3}"
+                android:textColor="@color/text_content"
+                android:textColorHint="@color/color_input_hint"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/gray_divide" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:text="频率成分2"
+                android:textColor="@color/text_title"
+                android:textSize="15sp" />
+
+            <EditText
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="1"
+                android:afterTextChanged="@{inputType1.textChangeListener}"
+                android:background="@null"
+                android:gravity="right|center_vertical"
+                android:hint="请输入"
+                android:paddingRight="15dp"
+                android:text="@={inputType1.value4}"
+                android:textColor="@color/text_content"
+                android:textColorHint="@color/color_input_hint"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+</layout>

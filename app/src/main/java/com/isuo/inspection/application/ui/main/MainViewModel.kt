@@ -1,19 +1,17 @@
 package com.isuo.inspection.application.ui.main
 
 import android.text.Editable
-import android.text.TextUtils
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.isuo.inspection.application.base.ext.async
 import com.isuo.inspection.application.model.bean.SubstationBean
 import com.isuo.inspection.application.repository.TaskRepository
 import com.isuo.inspection.application.repository.UserRepository
-import io.reactivex.Observable
+import com.isuo.inspection.application.utils.Event
 import io.reactivex.Single
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.toObservable
-import java.util.ArrayList
-import java.util.concurrent.TimeUnit
+import java.util.*
 
 class MainViewModel(
     private val userRepository: UserRepository,
@@ -23,9 +21,9 @@ class MainViewModel(
     var toastStr: MutableLiveData<String> = MutableLiveData()
     var requestState: MutableLiveData<Int> = MutableLiveData()
 
-    var count1Str: MutableLiveData<String> = MutableLiveData()
-    var count2Str: MutableLiveData<String> = MutableLiveData()
-    var count3Str: MutableLiveData<String> = MutableLiveData()
+    var count1Str: MutableLiveData<String> = MutableLiveData("10")
+    var count2Str: MutableLiveData<String> = MutableLiveData("20")
+    var count3Str: MutableLiveData<String> = MutableLiveData("7650")
 
     var searchText: MutableLiveData<String> = MutableLiveData()
 
@@ -35,7 +33,37 @@ class MainViewModel(
 
     }
 
+    private val _showUserCenter = MutableLiveData<Event<Unit>>()
+    val showUserCenter: LiveData<Event<Unit>> = _showUserCenter
+
+    fun showUserCenter() {
+        _showUserCenter.value = Event(Unit)
+    }
+
+    private val _showSearchSub = MutableLiveData<Event<Unit>>()
+    val showSearchSub: LiveData<Event<Unit>> = _showSearchSub
+
+    fun showSearchSub() {
+        _showSearchSub.value = Event(Unit)
+    }
+
     var disposable: Disposable? = null
+
+    fun start(): Single<List<SubstationBean>> {
+        dataList.clear()
+        for (index in 0..10) {
+            dataList.add(SubstationBean(index.toLong(), "变电站$index"))
+        }
+        return dataList.toObservable().toList()
+    }
+
+    fun loadMore(): Single<List<SubstationBean>> {
+        val oldSize = dataList.size
+        for (index in 0..10) {
+            dataList.add(SubstationBean((oldSize + index).toLong(), "变电站" + (oldSize + index)))
+        }
+        return dataList.toObservable().toList()
+    }
 
     override fun onCleared() {
         super.onCleared()

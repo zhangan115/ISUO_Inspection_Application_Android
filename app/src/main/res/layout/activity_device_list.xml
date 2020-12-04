@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data class="DeviceListDataBinding">
+
+        <import type="android.view.View" />
+
+        <import type="android.text.InputType" />
+
+        <variable
+            name="viewModel"
+            type="com.isuo.inspection.application.ui.main.device_list.DeviceListViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include layout="@layout/toolbar" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:background="@color/colorWhite"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/shape_input_bg"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/icon_search" />
+
+                <EditText
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:afterTextChanged="@{viewModel.textChange}"
+                    android:background="@null"
+                    android:hint="搜索设备名称"
+                    android:maxLength="20"
+                    android:text="@={viewModel.searchText}"
+                    android:textColor="@color/text_black"
+                    android:textColorHint="@color/color_input_hint"
+                    android:textSize="@dimen/sp_14" />
+
+                <androidx.core.widget.ContentLoadingProgressBar
+                    style="?android:progressBarStyleLargeInverse"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:visibility="@{viewModel.isLoading()?View.VISIBLE:View.GONE}" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorCommonGreyBg">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="none" />
+            <!--            <include layout="@layout/layout_request_state" />-->
+
+        </RelativeLayout>
+    </LinearLayout>
+</layout>

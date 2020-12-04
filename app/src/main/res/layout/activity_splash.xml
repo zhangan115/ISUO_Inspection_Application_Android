@@ -55,7 +55,8 @@
             android:layout_marginBottom="50dp"
             android:text="Copyright © 2020 Xi'an Sitech Electric Co.,Ltd"
             android:textColor="#ff888888"
-            android:textSize="13sp" />
+            android:textSize="13sp"
+            android:visibility="gone" />
 
     </RelativeLayout>
 </layout>
