@@ -11,6 +11,7 @@ import androidx.annotation.NonNull
 import com.isuo.inspection.application.BuildConfig
 import com.isuo.inspection.application.R
 import com.isuo.inspection.application.common.ConstantStr
+import com.isuo.inspection.application.model.bean.UserModel
 import com.isuo.inspection.application.repository.DataRepository
 import com.isuo.inspection.application.repository.TaskRepository
 import com.isuo.inspection.application.repository.UserRepository
@@ -219,6 +220,15 @@ open class ISUOApplication : Application() {
             }
         }
     }
+
+    public fun setCurrentUser(user: UserModel) {
+
+    }
+
+    public fun getCurrentUser(): UserModel? {
+        return null
+    }
+
 
     var isLoginOpen = false
 

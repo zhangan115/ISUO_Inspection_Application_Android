@@ -23,6 +23,7 @@ import androidx.savedstate.SavedStateRegistryOwner
 import com.isuo.inspection.application.repository.DataRepository
 import com.isuo.inspection.application.repository.TaskRepository
 import com.isuo.inspection.application.repository.UserRepository
+import com.isuo.inspection.application.ui.data.DataBaseViewModel
 import com.isuo.inspection.application.ui.login.LoginViewModel
 import com.isuo.inspection.application.ui.user.user_info.UserInfoViewModel
 import com.isuo.inspection.application.ui.main.MainViewModel
@@ -72,6 +73,8 @@ class ViewModelFactory constructor(
                 DeviceListViewModel(taskRepository)
             isAssignableFrom(InputViewModel::class.java) ->
                 InputViewModel(taskRepository)
+            isAssignableFrom(DataBaseViewModel::class.java) ->
+                DataBaseViewModel(dataRepository)
             else ->
                 throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
         }

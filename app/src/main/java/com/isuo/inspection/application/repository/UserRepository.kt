@@ -87,11 +87,5 @@ class UserRepository(private val content: Context) {
         SPHelper.write(content, ConstantStr.USER_INFO, ConstantStr.USER_VERSION, version)
     }
 
-    /**
-     * 获取当前用户的位置
-     */
-    fun getUserLocation(): String? {
-        return SPHelper.readString(content, ConstantStr.USER_INFO, ConstantStr.USER_LOCATION)
-    }
 
 }

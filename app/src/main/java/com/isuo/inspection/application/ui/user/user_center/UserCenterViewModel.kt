@@ -50,6 +50,13 @@ class UserCenterViewModel(val repository: UserRepository) : ViewModel() {
         _toExitApp.value = Event(Unit)
     }
 
+    private val _toShowUserPhoto = MutableLiveData<Event<Unit>>()
+    val toShowUserPhoto: LiveData<Event<Unit>> = _toShowUserPhoto
+
+    fun toShowUserPhoto() {
+        _toShowUserPhoto.value = Event(Unit)
+    }
+
 
     override fun onCleared() {
         super.onCleared()

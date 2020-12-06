@@ -2,18 +2,21 @@ package com.isuo.inspection.application.ui.user.user_center
 
 import android.content.Intent
 import android.os.Bundle
+import android.provider.Settings
+import android.text.TextUtils
 import androidx.activity.viewModels
-import com.afollestad.materialdialogs.LayoutMode
 import com.afollestad.materialdialogs.MaterialDialog
-import com.afollestad.materialdialogs.bottomsheets.BottomSheet
+import com.afollestad.materialdialogs.lifecycle.lifecycleOwner
 import com.isuo.inspection.application.R
 import com.isuo.inspection.application.app.ISUOApplication
 import com.isuo.inspection.application.base.AbsBaseActivity
 import com.isuo.inspection.application.base.ext.getViewModelFactory
+import com.isuo.inspection.application.base.ext.showChoosePhotoDialog
 import com.isuo.inspection.application.databinding.UserCenterDataBinding
 import com.isuo.inspection.application.ui.user.forget_pass.ForgetPassActivity
 import com.isuo.inspection.application.ui.user.user_info.UserInfoActivity
 import com.isuo.inspection.application.utils.EventObserver
+import java.io.File
 
 class UserCenterActivity : AbsBaseActivity<UserCenterDataBinding>() {
 
@@ -36,6 +39,19 @@ class UserCenterActivity : AbsBaseActivity<UserCenterDataBinding>() {
         viewModel.toCheckNewVersion.observe(this, EventObserver {
 
         })
+        val user = ISUOApplication.instance.getCurrentUser()
+        user?.let {
+            viewModel.userImageUrl.value = it.portraitUrl
+        }
+        viewModel.toShowUserPhoto.observe(this, EventObserver {
+            if (user != null && !TextUtils.isEmpty(user.portraitUrl)) {
+                val file = File(
+                    ISUOApplication.instance.imageCacheFile(),
+                    System.currentTimeMillis().toString() + ".jpg"
+                )
+                showChoosePhotoDialog(200, file)
+            }
+        })
         viewModel.toExitApp.observe(this, EventObserver {
             MaterialDialog(this)
                 .show {
@@ -45,8 +61,15 @@ class UserCenterActivity : AbsBaseActivity<UserCenterDataBinding>() {
                     this.positiveButton {
                         ISUOApplication.instance.needLogin()
                     }
+                    lifecycleOwner(this@UserCenterActivity)
                 }
         })
+    }
+
+    override fun dealFile(requestCode: Int, file: File) {
+        if (requestCode == 200) {
+
+        }
     }
 
     override fun initData(savedInstanceState: Bundle?) {

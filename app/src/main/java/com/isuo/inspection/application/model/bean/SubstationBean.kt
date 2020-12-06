@@ -54,17 +54,32 @@ class InputType2() {
         val text1 = value1.get()
         val text2 = value2.get()
         val text3 = value3.get()
-        isFinish.value = !TextUtils.isEmpty(text1) && !TextUtils.isEmpty(text2)&& !TextUtils.isEmpty(text3)
-    }
-
-    fun chooseValue(){
-        val text1 = value1.get()
-        val text2 = value2.get()
-        val text3 = value3.get()
-        isFinish.value = !TextUtils.isEmpty(text1) && !TextUtils.isEmpty(text2)&& !TextUtils.isEmpty(text3)
+        isFinish.value =
+            !TextUtils.isEmpty(text1) && !TextUtils.isEmpty(text2) && !TextUtils.isEmpty(text3)
     }
 }
 
 class InputType3() {
 
+    val positionText: ObservableField<String> = ObservableField()
+    val value1: ObservableField<String> = ObservableField()
+    val value2: ObservableField<String> = ObservableField()
+
+    val isFinish: MutableLiveData<Type3StateBean> = MutableLiveData()
+
+    fun textChangeListener(s: Editable) {
+        val text1 = value1.get()
+        val text2 = value2.get()
+        val bean = isFinish.value
+        val isFinish = !TextUtils.isEmpty(text1) && !TextUtils.isEmpty(text2)
+        if (bean != null && bean.isFinish.value != isFinish) {
+            bean.isFinish.value = isFinish
+            this.isFinish.postValue(bean)
+        }
+    }
+}
+
+class Type3StateBean {
+    val chooseId: ObservableField<Int> = ObservableField()
+    val isFinish: MutableLiveData<Boolean> = MutableLiveData()
 }

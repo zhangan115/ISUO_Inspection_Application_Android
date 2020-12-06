@@ -60,7 +60,7 @@ class MainActivity : AbsBaseActivity<MainDataBinding>() {
     }
 
     private fun getData(){
-        viewModel.start().async(2000).bindLifeCycle(this).subscribe { list ->
+        viewModel.start().async(1000).bindLifeCycle(this).subscribe { list ->
             dataList.clear()
             dataList.addAll(list)
             recyclerView.adapter?.notifyDataSetChanged()
@@ -73,7 +73,7 @@ class MainActivity : AbsBaseActivity<MainDataBinding>() {
     }
 
     private fun loadMoreData() {
-        viewModel.loadMore().async(2000).bindLifeCycle(this).subscribe { list ->
+        viewModel.loadMore().async(1000).bindLifeCycle(this).subscribe { list ->
             dataList.addAll(list)
             recyclerView.adapter?.notifyDataSetChanged()
             if (dataList.size > ConstantInt.PAGE_SIZE) {

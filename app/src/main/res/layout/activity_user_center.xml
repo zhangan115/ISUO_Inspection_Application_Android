@@ -72,6 +72,7 @@
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:layout_marginRight="16dp"
+                        android:onClick="@{()->viewModel.toShowUserPhoto()}"
                         app:cirImageUrl="@{viewModel.userImageUrl}"
                         app:cirPlaceHolder="@{@drawable/mine_img_head}" />
 
