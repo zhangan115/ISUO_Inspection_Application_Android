@@ -52,15 +52,14 @@ class MainActivity : AbsBaseActivity<MainDataBinding>() {
             startActivity(Intent(this, UserCenterActivity::class.java))
         })
         refreshLayout.setOnRefreshListener {
-            requestData()
+            getData()
         }
         refreshLayout.setOnLoadMoreListener {
             loadMoreData()
         }
     }
 
-    override fun requestData() {
-        refreshLayout.autoRefresh()
+    private fun getData(){
         viewModel.start().async(2000).bindLifeCycle(this).subscribe { list ->
             dataList.clear()
             dataList.addAll(list)
@@ -69,11 +68,15 @@ class MainActivity : AbsBaseActivity<MainDataBinding>() {
         }
     }
 
+    override fun requestData() {
+        refreshLayout.autoRefresh()
+    }
+
     private fun loadMoreData() {
         viewModel.loadMore().async(2000).bindLifeCycle(this).subscribe { list ->
             dataList.addAll(list)
             recyclerView.adapter?.notifyDataSetChanged()
-            if (dataList.size > 20) {
+            if (dataList.size > ConstantInt.PAGE_SIZE) {
                 refreshLayout.finishLoadMoreWithNoMoreData()
             } else {
                 refreshLayout.finishLoadMore(true)

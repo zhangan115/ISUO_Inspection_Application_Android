@@ -4,6 +4,14 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.afollestad.materialdialogs.LayoutMode
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.bottomsheets.BasicGridItem
+import com.afollestad.materialdialogs.bottomsheets.BottomSheet
+import com.afollestad.materialdialogs.bottomsheets.GridItem
+import com.afollestad.materialdialogs.bottomsheets.gridItems
+import com.afollestad.materialdialogs.list.listItems
+import com.afollestad.materialdialogs.list.listItemsSingleChoice
 import com.isuo.inspection.application.BR
 import com.isuo.inspection.application.R
 import com.isuo.inspection.application.adapter.GenericQuickAdapter
@@ -14,6 +22,7 @@ import com.isuo.inspection.application.databinding.InputDataBinding
 import com.isuo.inspection.application.model.bean.InputType1
 import com.isuo.inspection.application.model.bean.InputType2
 import com.isuo.inspection.application.model.bean.InputType3
+import com.orhanobut.logger.Logger
 import kotlinx.android.synthetic.main.activity_input.*
 
 class InputActivity : AbsBaseActivity<InputDataBinding>() {
@@ -41,7 +50,28 @@ class InputActivity : AbsBaseActivity<InputDataBinding>() {
                 recyclerView.adapter = adapter
             }
             1 -> {
-
+                val inputType2 = InputType2()
+                inputType2.isFinish.observe(this, Observer {
+                    viewModel.canClick.value = it
+                })
+                dataList2.add(inputType2)
+                val adapter = GenericQuickAdapter(
+                    R.layout.item_input_type_2, this.dataList2, BR.inputType2
+                )
+                recyclerView.adapter = adapter
+                adapter.addChildClickViewIds(R.id.choosePhotoType)
+                adapter.setOnItemChildClickListener { _, view, _ ->
+                    if (view.id == R.id.choosePhotoType) {
+                        MaterialDialog(this, BottomSheet(LayoutMode.WRAP_CONTENT))
+                            .show {
+                                listItems(R.array.choose_photo_list){_, index, text ->
+                                    dataList2[0].value3.set(text.toString())
+                                    dataList2[0].chooseId.set(index)
+                                    dataList2[0].chooseValue()
+                                }
+                            }
+                    }
+                }
             }
             else -> {
 

@@ -18,4 +18,8 @@
     <string name="login_hit_use_code">请输入验证码</string>
     <string name="login_hit_use_pass">请输入密码</string>
     <string name="login_hit_use_new_pass">再次请输入密码</string>
+
+    <string name="list_1">无明显特征</string>
+    <string name="list_2">无明显特征</string>
+    <string name="list_3">无明显特征</string>
 </resources>
