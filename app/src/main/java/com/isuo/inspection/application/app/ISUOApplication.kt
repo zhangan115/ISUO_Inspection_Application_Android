@@ -226,7 +226,7 @@ open class ISUOApplication : Application() {
     }
 
     public fun getCurrentUser(): UserModel? {
-        return null
+        return UserModel()
     }
 
 

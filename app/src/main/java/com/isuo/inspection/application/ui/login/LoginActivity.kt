@@ -19,6 +19,10 @@ import com.isuo.inspection.application.utils.EventObserver
 
 class LoginActivity : AbsBaseActivity<LoginDataBinding>() {
 
+    override var showDarkIcon: Boolean
+        get() = true
+        set(value) {}
+
     private val viewModel by viewModels<LoginViewModel> { getViewModelFactory() }
 
     private fun showMainActivity() {

@@ -1,3 +1,4 @@
 rootProject.name='ISUO_Inspection_Application'
 include ':app'
 include ':tool_library'
+include ':stickyDecoration'

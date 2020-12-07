@@ -50,7 +50,7 @@
 
     <!-- ToolBar菜单样式 -->
     <style name="ToolbarTheme" parent="@style/ThemeOverlay.AppCompat.ActionBar">
-        <item name="actionMenuTextColor">#000000</item> <!--  敲定颜色-->
+        <item name="actionMenuTextColor">@color/colorWhite</item> <!--  敲定颜色-->
         <!-- <item name="android:textSize">18sp</item>   搞掂字体大小-->
         <item name="navigationIcon">@mipmap/label_icon_back</item>
     </style>

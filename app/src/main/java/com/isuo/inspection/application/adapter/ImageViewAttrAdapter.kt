@@ -59,20 +59,27 @@ object ImageViewAttrAdapter {
             imageView.setImageDrawable(holderDrawable)
             return
         }
-//        if (url!!.startsWith("http")) {
-//            GlideUtils.ShowCircleImageWithContext(
-//                imageView.context,
-//                url,
-//                imageView,
-//                holderDrawable
-//            )
-//        } else {
-//            GlideUtils.ShowCircleImageWithContext(
-//                imageView.context,
-//                ISUOApplication.appHost() + url,
-//                imageView,
-//                holderDrawable
-//            )
-//        }
+        if (url!!.startsWith("http")) {
+            GlideUtils.ShowCircleImageWithContext(
+                imageView.context,
+                url,
+                imageView,
+                holderDrawable
+            )
+        } else if (url.startsWith(ISUOApplication.instance.imageCacheFile())) {
+            GlideUtils.ShowCircleImageWithContext(
+                imageView.context,
+                url,
+                imageView,
+                holderDrawable
+            )
+        } else {
+            GlideUtils.ShowCircleImageWithContext(
+                imageView.context,
+                ISUOApplication.appHost() + url,
+                imageView,
+                holderDrawable
+            )
+        }
     }
 }

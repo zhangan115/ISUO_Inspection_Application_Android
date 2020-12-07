@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data class="DataBaseDataBinding">
 
@@ -20,6 +21,34 @@
             android:layout_height="match_parent"
             android:background="@color/colorCommonGreyBg">
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <com.ogaclejapan.smarttablayout.SmartTabLayout
+                    android:id="@+id/tabs"
+                    android:layout_width="match_parent"
+                    android:layout_height="42dp"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@color/colorWhite"
+                    app:stl_customTabTextLayoutId="@layout/tab_layout"
+                    app:stl_customTabTextViewId="@+id/id_tv_title"
+                    app:stl_distributeEvenly="true"
+                    app:stl_dividerThickness="0dp"
+                    app:stl_indicatorColor="@color/colorAccent"
+                    app:stl_indicatorCornerRadius="1.5dp"
+                    app:stl_indicatorInFront="true"
+                    app:stl_indicatorThickness="3dp"
+                    app:stl_indicatorWidth="150dp"
+                    app:stl_underlineColor="@color/colorWhite"
+                    app:stl_underlineThickness="2dp" />
+
+                <androidx.viewpager.widget.ViewPager
+                    android:id="@+id/viewpager"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
         </RelativeLayout>
     </LinearLayout>
 </layout>

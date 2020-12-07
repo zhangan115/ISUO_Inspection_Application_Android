@@ -1,13 +1,24 @@
 package com.isuo.inspection.application.ui.data
 
+import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.TextView
 import androidx.activity.viewModels
+import androidx.viewpager.widget.ViewPager
 import com.isuo.inspection.application.R
 import com.isuo.inspection.application.base.AbsBaseActivity
 import com.isuo.inspection.application.base.ext.getViewModelFactory
 import com.isuo.inspection.application.common.ConstantStr
 import com.isuo.inspection.application.databinding.DataBaseDataBinding
+import com.isuo.inspection.application.ui.data.chart.ChartFragment
+import com.isuo.inspection.application.ui.data.filter.DataFilterActivity
+import com.isuo.inspection.application.ui.data.history.HistoryListFragment
+import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItemAdapter
+import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems
+import com.orhanobut.logger.Logger
+import kotlinx.android.synthetic.main.activity_data_base.*
 
 class DataBaseActivity : AbsBaseActivity<DataBaseDataBinding>() {
 
@@ -22,8 +33,72 @@ class DataBaseActivity : AbsBaseActivity<DataBaseDataBinding>() {
         return deviceName
     }
 
-    override fun initView(savedInstanceState: Bundle?) {
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_filter, menu)
+        return true
+    }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.menu_filter) {
+            val intent = Intent(this, DataFilterActivity::class.java)
+            intent.putExtra(ConstantStr.KEY_BUNDLE_INT, inputType)
+            startActivityForResult(intent, 10001)
+        }
+        return true
+    }
+
+    override fun initView(savedInstanceState: Bundle?) {
+        val bundle1 = Bundle()
+        bundle1.putString(ConstantStr.KEY_BUNDLE_STR, deviceName)
+        bundle1.putString(ConstantStr.KEY_BUNDLE_STR_1, "xxxxx")
+        bundle1.putInt(ConstantStr.KEY_BUNDLE_INT, inputType)
+        bundle1.putLong(ConstantStr.KEY_BUNDLE_LONG, deviceId)
+
+        val adapter = FragmentPagerItemAdapter(
+            supportFragmentManager
+            , FragmentPagerItems.with(this)
+                .add(
+                    getString(R.string.history_tabs_name),
+                    HistoryListFragment::class.java,
+                    bundle1
+                )
+                .add(
+                    getString(R.string.chart_tabs_name),
+                    ChartFragment::class.java,
+                    bundle1
+                )
+                .create()
+        )
+        viewpager.adapter = adapter
+        tabs.setViewPager(viewpager)
+        val textView1 = tabs.getTabAt(0).findViewById<TextView>(R.id.id_tv_title)
+        val textView2 = tabs.getTabAt(1).findViewById<TextView>(R.id.id_tv_title)
+        textView1.setTextColor(findColor(R.color.text_title))
+        textView2.setTextColor(findColor(R.color.text_grey))
+        tabs.setOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+
+            override fun onPageScrollStateChanged(state: Int) {
+
+            }
+
+            override fun onPageScrolled(
+                position: Int,
+                positionOffset: Float,
+                positionOffsetPixels: Int
+            ) {
+
+            }
+
+            override fun onPageSelected(position: Int) {
+                if (position == 0) {
+                    textView1.setTextColor(findColor(R.color.text_title))
+                    textView2.setTextColor(findColor(R.color.text_grey))
+                } else {
+                    textView1.setTextColor(findColor(R.color.text_grey))
+                    textView2.setTextColor(findColor(R.color.text_title))
+                }
+            }
+        })
     }
 
     override fun initData(savedInstanceState: Bundle?) {

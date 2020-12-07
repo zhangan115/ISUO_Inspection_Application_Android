@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.afollestad.materialdialogs.LayoutMode
 import com.afollestad.materialdialogs.MaterialDialog
@@ -24,6 +25,7 @@ import com.isuo.inspection.application.model.bean.InputType2
 import com.isuo.inspection.application.model.bean.InputType3
 import com.isuo.inspection.application.model.bean.Type3StateBean
 import com.isuo.inspection.application.ui.data.DataBaseActivity
+import com.isuo.inspection.application.utils.Event
 import com.isuo.inspection.application.utils.EventObserver
 import kotlinx.android.synthetic.main.activity_input.*
 
@@ -54,7 +56,7 @@ class InputActivity : AbsBaseActivity<InputDataBinding>() {
         when (this.inputType) {
             0 -> {
                 val inputType1 = InputType1()
-                inputType1.isFinish.observe(this, {
+                inputType1.isFinish.observe(this,Observer{
                     viewModel.canClick.value = it
                 })
                 dataList1.add(inputType1)
@@ -65,7 +67,7 @@ class InputActivity : AbsBaseActivity<InputDataBinding>() {
             }
             1 -> {
                 val inputType2 = InputType2()
-                inputType2.isFinish.observe(this, {
+                inputType2.isFinish.observe(this,Observer {
                     viewModel.canClick.value = it
                 })
                 dataList2.add(inputType2)
@@ -98,7 +100,7 @@ class InputActivity : AbsBaseActivity<InputDataBinding>() {
                     bean.isFinish.value = false
                     inputType3.isFinish.value = bean
                     valueType3State.add(false)
-                    inputType3.isFinish.observe(this, { bean1 ->
+                    inputType3.isFinish.observe(this, Observer{ bean1 ->
                         if (bean1.chooseId.get() != null && bean1.isFinish.value != null) {
                             valueType3State[bean1.chooseId.get()!!] = bean1.isFinish.value!!
                             val state = valueType3State.filter { it }

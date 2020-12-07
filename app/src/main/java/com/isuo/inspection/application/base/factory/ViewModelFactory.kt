@@ -24,6 +24,9 @@ import com.isuo.inspection.application.repository.DataRepository
 import com.isuo.inspection.application.repository.TaskRepository
 import com.isuo.inspection.application.repository.UserRepository
 import com.isuo.inspection.application.ui.data.DataBaseViewModel
+import com.isuo.inspection.application.ui.data.chart.ChartViewModel
+import com.isuo.inspection.application.ui.data.filter.DataFilterViewModel
+import com.isuo.inspection.application.ui.data.history.HistoryListViewModel
 import com.isuo.inspection.application.ui.login.LoginViewModel
 import com.isuo.inspection.application.ui.user.user_info.UserInfoViewModel
 import com.isuo.inspection.application.ui.main.MainViewModel
@@ -75,6 +78,12 @@ class ViewModelFactory constructor(
                 InputViewModel(taskRepository)
             isAssignableFrom(DataBaseViewModel::class.java) ->
                 DataBaseViewModel(dataRepository)
+            isAssignableFrom(DataFilterViewModel::class.java) ->
+                DataFilterViewModel()
+            isAssignableFrom(ChartViewModel::class.java) ->
+                ChartViewModel(taskRepository)
+            isAssignableFrom(HistoryListViewModel::class.java) ->
+                HistoryListViewModel(taskRepository)
             else ->
                 throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
         }

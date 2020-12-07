@@ -18,6 +18,7 @@
     <color name="text_title">#333333</color>
     <color name="text_content">#454545</color>
     <color name="text_yellow">#EAB602</color>
+    <color name="text_grey">#999999</color>
     <!--  input color  -->
     <color name="color_input_bg">#F4F4F4</color>
     <color name="color_input_frame">#CCCCCC</color>

@@ -2,8 +2,6 @@ package com.isuo.inspection.application.ui.user.user_center
 
 import android.content.Intent
 import android.os.Bundle
-import android.provider.Settings
-import android.text.TextUtils
 import androidx.activity.viewModels
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.lifecycle.lifecycleOwner
@@ -44,12 +42,8 @@ class UserCenterActivity : AbsBaseActivity<UserCenterDataBinding>() {
             viewModel.userImageUrl.value = it.portraitUrl
         }
         viewModel.toShowUserPhoto.observe(this, EventObserver {
-            if (user != null && !TextUtils.isEmpty(user.portraitUrl)) {
-                val file = File(
-                    ISUOApplication.instance.imageCacheFile(),
-                    System.currentTimeMillis().toString() + ".jpg"
-                )
-                showChoosePhotoDialog(200, file)
+            if (user != null) {
+                showChoosePhotoDialog(200, viewModel.userImageUrl.value)
             }
         })
         viewModel.toExitApp.observe(this, EventObserver {
@@ -68,7 +62,7 @@ class UserCenterActivity : AbsBaseActivity<UserCenterDataBinding>() {
 
     override fun dealFile(requestCode: Int, file: File) {
         if (requestCode == 200) {
-
+            viewModel.userImageUrl.value = file.absolutePath
         }
     }
 

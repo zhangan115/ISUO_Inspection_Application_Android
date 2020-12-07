@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data class="HistoryListDataBinding">
+
+        <import type="android.view.View" />
+
+        <import type="com.isuo.inspection.application.common.ConstantInt" />
+
+        <variable
+            name="viewModel"
+            type="com.isuo.inspection.application.ui.data.history.HistoryListViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorCommonGreyBg"
+        android:orientation="vertical">
+
+        <com.scwang.smartrefresh.layout.SmartRefreshLayout
+            android:id="@+id/refreshLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:srlAccentColor="@color/colorPrimary"
+            app:srlEnablePreviewInEditMode="true">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <com.sito.tool.library.widget.PinnedHeaderExpandableListView
+                    android:id="@+id/expandableListView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:cacheColorHint="@null"
+                    android:childDivider="@null"
+                    android:childIndicatorLeft="0dp"
+                    android:descendantFocusability="blocksDescendants"
+                    android:divider="@null"
+                    android:dividerHeight="0dp"
+                    android:groupIndicator="@null"
+                    android:listSelector="@color/colorTransparent"
+                    android:scrollbars="none" />
+            </RelativeLayout>
+
+
+        </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
+
+    </LinearLayout>
+</layout>

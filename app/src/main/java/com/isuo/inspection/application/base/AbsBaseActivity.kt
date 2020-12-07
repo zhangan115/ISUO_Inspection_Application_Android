@@ -34,6 +34,7 @@ abstract class AbsBaseActivity<T : ViewDataBinding> : BaseActivity() {
     open var showClose = false
     open var noDataLayout: View? = null
     open var netWorkErrorLayout: View? = null
+    open var showDarkIcon = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -84,7 +85,7 @@ abstract class AbsBaseActivity<T : ViewDataBinding> : BaseActivity() {
 
     open fun initThem() {
         //设置主题
-        setDarkStatusIcon(true)
+        setDarkStatusIcon(showDarkIcon)
     }
 
     open fun getSaveState(savedInstanceState: Bundle?) {
@@ -109,7 +110,7 @@ abstract class AbsBaseActivity<T : ViewDataBinding> : BaseActivity() {
                 if (photo != null) {
                     val photoURI = FileProvider.getUriForFile(
                         this,
-                        "com.sito.electrician.application.fileprovider",
+                        "com.isuo.inspection.application.fileprovider",
                         photo!!
                     )
                     try {

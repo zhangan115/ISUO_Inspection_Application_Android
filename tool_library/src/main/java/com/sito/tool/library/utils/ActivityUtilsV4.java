@@ -55,7 +55,7 @@ public class ActivityUtilsV4 {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(activity.getPackageManager()) != null) {
             if (photoFile != null) {
-                Uri photoURI = FileProvider.getUriForFile(activity, "com.sito.electrician.application.fileprovider", photoFile);
+                Uri photoURI = FileProvider.getUriForFile(activity, "com.isuo.inspection.application.fileprovider", photoFile);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 activity.startActivityForResult(takePictureIntent, REQUEST_CODE);
             }

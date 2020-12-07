@@ -2,6 +2,7 @@ package com.sito.tool.library.utils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.widget.ImageView;
 
@@ -160,6 +161,26 @@ public final class GlideUtils {
             return;
         }
         Glide.with(activity).load(url)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .error(drawableRes)
+                .placeholder(drawableRes)
+                .transform(new CircleTransform())
+                .into(imageView);
+    }
+
+    /**
+     * 设置圆形图片
+     *
+     * @param context  环境
+     * @param url       url
+     * @param imageView ImageView 对象
+     */
+    public static void ShowCircleImageWithContext(Context context, String url, ImageView imageView, Drawable drawableRes) {
+        if (TextUtils.isEmpty(url)) {
+            imageView.setImageDrawable(drawableRes);
+            return;
+        }
+        Glide.with(context).load(url)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .error(drawableRes)
                 .placeholder(drawableRes)

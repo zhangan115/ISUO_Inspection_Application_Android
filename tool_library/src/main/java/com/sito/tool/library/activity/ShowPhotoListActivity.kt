@@ -116,7 +116,6 @@ class ShowPhotoListActivity : AppCompatActivity() {
             )
             img.adjustViewBounds = true
             img.setOnClickListener(mOnClickListener)
-
             val options: RequestOptions = RequestOptions()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .error(getDrawable(drawableRes))
