@@ -32,6 +32,7 @@ class UserCenterViewModel(val repository: UserRepository) : ViewModel() {
     val toCheckNewVersion: LiveData<Event<Unit>> = _toCheckNewVersion
 
     fun toCheckNewVersion() {
+        toastStr.value = "当前为最新版本"
         _toCheckNewVersion.value = Event(Unit)
     }
 

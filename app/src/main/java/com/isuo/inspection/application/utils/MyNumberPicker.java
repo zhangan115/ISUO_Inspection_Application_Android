@@ -70,14 +70,23 @@ public class MyNumberPicker extends NumberPicker {
     private void setNumberPickerDivider() {
         try {
             {
-                Field field = NumberPicker.class.getDeclaredField("mSelectionDivider");
-                field.setAccessible(true);
-                field.set(this, ContextCompat.getDrawable(getContext(), R.drawable.number_pick_drawable));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+
+                } else {
+                    Field field = NumberPicker.class.getDeclaredField("mSelectionDivider");
+                    field.setAccessible(true);
+                    field.set(this, ContextCompat.getDrawable(getContext(), R.drawable.number_pick_drawable));
+                }
+
             }
             {
-                Field field = NumberPicker.class.getDeclaredField("mSelectionDividerHeight");
-                field.setAccessible(true);
-                field.set(this, DisplayUtil.dip2px(getContext(), 2));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+
+                } else {
+                    Field field = NumberPicker.class.getDeclaredField("mSelectionDividerHeight");
+                    field.setAccessible(true);
+                    field.set(this, DisplayUtil.dip2px(getContext(), 2));
+                }
             }
         } catch (NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();

@@ -1,5 +1,6 @@
 package com.isuo.inspection.application.ui.data
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
@@ -12,6 +13,8 @@ import com.isuo.inspection.application.base.AbsBaseActivity
 import com.isuo.inspection.application.base.ext.getViewModelFactory
 import com.isuo.inspection.application.common.ConstantStr
 import com.isuo.inspection.application.databinding.DataBaseDataBinding
+import com.isuo.inspection.application.model.bean.MessageChartEvent
+import com.isuo.inspection.application.model.bean.MessageEvent
 import com.isuo.inspection.application.ui.data.chart.ChartFragment
 import com.isuo.inspection.application.ui.data.filter.DataFilterActivity
 import com.isuo.inspection.application.ui.data.history.HistoryListFragment
@@ -19,6 +22,7 @@ import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItemAdapter
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems
 import com.orhanobut.logger.Logger
 import kotlinx.android.synthetic.main.activity_data_base.*
+import org.greenrobot.eventbus.EventBus
 
 class DataBaseActivity : AbsBaseActivity<DataBaseDataBinding>() {
 
@@ -45,6 +49,22 @@ class DataBaseActivity : AbsBaseActivity<DataBaseDataBinding>() {
             startActivityForResult(intent, 10001)
         }
         return true
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK && requestCode == 10001) {
+            val msg = MessageEvent()
+            val startTime = data?.getStringExtra(ConstantStr.KEY_BUNDLE_STR)
+            val endTime = data?.getStringExtra(ConstantStr.KEY_BUNDLE_STR_1)
+            val positionId = data?.getIntExtra(ConstantStr.KEY_BUNDLE_INT, -1)
+            if (positionId == -1) {
+                msg.MessageEvent(ConstantStr.SEND_DATA, startTime, endTime, null)
+            } else {
+                msg.MessageEvent(ConstantStr.SEND_DATA, startTime, endTime, positionId)
+            }
+            EventBus.getDefault().postSticky(msg)
+        }
     }
 
     override fun initView(savedInstanceState: Bundle?) {

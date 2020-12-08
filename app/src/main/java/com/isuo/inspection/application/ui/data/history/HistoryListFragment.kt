@@ -1,25 +1,41 @@
 package com.isuo.inspection.application.ui.data.history
 
-import android.view.View
-import android.widget.ExpandableListView
+import android.os.Bundle
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.isuo.inspection.application.R
+import com.isuo.inspection.application.adapter.RVAdapter
+import com.isuo.inspection.application.app.ISUOApplication
 import com.isuo.inspection.application.base.BaseFragment
 import com.isuo.inspection.application.base.ext.async
 import com.isuo.inspection.application.base.ext.bindLifeCycle
 import com.isuo.inspection.application.base.ext.getViewModelFactory
+import com.isuo.inspection.application.common.ConstantInt
 import com.isuo.inspection.application.common.ConstantStr
 import com.isuo.inspection.application.databinding.HistoryListDataBinding
-import com.isuo.inspection.application.model.bean.HistoryData
+import com.isuo.inspection.application.model.bean.*
 import com.isuo.inspection.application.ui.data.history.adapter.Type1Adapter
 import com.isuo.inspection.application.ui.data.history.adapter.Type2Adapter
 import com.isuo.inspection.application.ui.data.history.adapter.Type3Adapter
+import com.isuo.inspection.application.ui.data.history.widget.LayoutType3
+import com.isuo.inspection.application.utils.DataUtil
 import kotlinx.android.synthetic.main.fragment_history_list.*
-import java.util.ArrayList
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
+import java.text.MessageFormat
+import java.util.*
 
 class HistoryListFragment : BaseFragment<HistoryListDataBinding>() {
 
     var dataList = ArrayList<HistoryData>()
+
+    var dataType1List = ArrayList<Type1Data>()
+    var dataType2List = ArrayList<Type2Data>()
+    var dataType3List = ArrayList<Type3Data>()
 
     private val viewModel by viewModels<HistoryListViewModel> { getViewModelFactory() }
 
@@ -28,46 +44,18 @@ class HistoryListFragment : BaseFragment<HistoryListDataBinding>() {
     }
 
     private fun getData() {
-        viewModel.start().async(1000).bindLifeCycle(this).subscribe { list ->
-            dataList.clear()
-            dataList.addAll(list)
-            when (inputType) {
-                0 -> {
-                    adapter1?.setData(dataList)
-                }
-                1 -> {
-                    adapter2?.setData(dataList)
-                }
-                else -> {
-                    adapter3?.setData(dataList)
-                }
-            }
-            for (index in 0 until expandableListView.expandableListAdapter!!.groupCount) {
-                expandableListView.expandGroup(index, false)
-            }
-            refreshLayout.finishRefresh()
+        if (viewModel.showChooseListView.value!!) {
+            getChooseData()
+        } else {
+            getNormalData()
         }
     }
 
     private fun loadMoreData() {
-        viewModel.start().async(1000).bindLifeCycle(this).subscribe { list ->
-            dataList.addAll(list)
-            when (inputType) {
-                0 -> {
-                    adapter1?.addData(dataList)
-                }
-                1 -> {
-                    adapter2?.addData(dataList)
-                }
-                else -> {
-                    adapter3?.addData(dataList)
-                }
-            }
-            for (index in 0 until expandableListView.expandableListAdapter!!.groupCount) {
-                expandableListView.expandGroup(index, false)
-            }
-            refreshLayout.finishLoadMore()
-            refreshLayout.finishLoadMoreWithNoMoreData()
+        if (viewModel.showChooseListView.value!!) {
+            getChooseMoreData()
+        } else {
+            getNormalMoreData()
         }
     }
 
@@ -86,6 +74,11 @@ class HistoryListFragment : BaseFragment<HistoryListDataBinding>() {
         checkPosition = arguments?.getString(ConstantStr.KEY_BUNDLE_STR_1)
         inputType = arguments?.getInt(ConstantStr.KEY_BUNDLE_INT)!!
         deviceId = arguments?.getLong(ConstantStr.KEY_BUNDLE_LONG, -1L)!!
+        if (inputType == 2) {
+            viewModel.showPositionView.value = false
+        }
+        viewModel.checkPosition.value = checkPosition
+        viewModel.checkType.value = viewModel.nameList[inputType]
     }
 
     private var adapter1: Type1Adapter? = null
@@ -94,6 +87,7 @@ class HistoryListFragment : BaseFragment<HistoryListDataBinding>() {
 
     override fun initView() {
         expandableListView.setOnGroupClickListener({ _, _, _, _ -> true }, false)
+        recyclerView.layoutManager = LinearLayoutManager(activity)
         when (inputType) {
             0 -> {
                 adapter1 = Type1Adapter(
@@ -103,6 +97,9 @@ class HistoryListFragment : BaseFragment<HistoryListDataBinding>() {
                     R.layout.item_type_child_1
                 )
                 expandableListView.setAdapter(adapter1)
+                val adapterList1 =
+                    TypeList1Adapter(recyclerView, dataType1List, R.layout.item_type_child_1)
+                recyclerView.adapter = adapterList1
             }
             1 -> {
                 adapter2 = Type2Adapter(
@@ -112,6 +109,9 @@ class HistoryListFragment : BaseFragment<HistoryListDataBinding>() {
                     R.layout.item_type_child_2
                 )
                 expandableListView.setAdapter(adapter2)
+                val adapterList2 =
+                    TypeList2Adapter(recyclerView, dataType2List, R.layout.item_type_child_2)
+                recyclerView.adapter = adapterList2
             }
             else -> {
                 adapter3 = Type3Adapter(
@@ -121,6 +121,9 @@ class HistoryListFragment : BaseFragment<HistoryListDataBinding>() {
                     R.layout.item_type_child_3
                 )
                 expandableListView.setAdapter(adapter3)
+                val adapterList3 =
+                    TypeList3Adapter(recyclerView, dataType3List, R.layout.item_type_child_3)
+                recyclerView.adapter = adapterList3
             }
         }
         refreshLayout.setOnRefreshListener {
@@ -135,4 +138,220 @@ class HistoryListFragment : BaseFragment<HistoryListDataBinding>() {
     override fun setViewModel(dataBinding: HistoryListDataBinding?) {
         dataBinding?.viewModel = viewModel
     }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        if (!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this)
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().unregister(this)
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN,sticky = false)
+    fun onEventMainThread(message: MessageEvent) {
+        if (message.message == ConstantStr.SEND_DATA) {
+            viewModel.showChooseDate.value = message.startTime + "至" + message.endTime
+            viewModel.showChooseListView.value = true
+            message.positionId?.let {
+                viewModel.positionId = it
+            }
+            dataList.clear()
+            dataType1List.clear()
+            dataType2List.clear()
+            dataType3List.clear()
+            refreshLayout.autoRefresh()
+        }
+    }
+
+    private fun getChooseData() {
+        when (inputType) {
+            0 -> {
+                viewModel.getType1Data().async(1000).bindLifeCycle(this).subscribe { list ->
+                    this.dataType1List.clear()
+                    this.dataType1List.addAll(list)
+                    recyclerView.adapter?.notifyDataSetChanged()
+                    if (list.size < ConstantInt.PAGE_SIZE) {
+                        refreshLayout.finishRefreshWithNoMoreData()
+                    } else {
+                        refreshLayout.finishRefresh()
+                    }
+                }
+            }
+            1 -> {
+                viewModel.getType2Data().async(1000).bindLifeCycle(this).subscribe { list ->
+                    this.dataType2List.clear()
+                    this.dataType2List.addAll(list)
+                    recyclerView.adapter?.notifyDataSetChanged()
+                    if (list.size < ConstantInt.PAGE_SIZE) {
+                        refreshLayout.finishRefreshWithNoMoreData()
+                    } else {
+                        refreshLayout.finishRefresh()
+                    }
+                }
+            }
+            else -> {
+                viewModel.getType3Data().async(1000).bindLifeCycle(this).subscribe { list ->
+                    this.dataType3List.clear()
+                    this.dataType3List.addAll(list)
+                    recyclerView.adapter?.notifyDataSetChanged()
+                    if (list.size < ConstantInt.PAGE_SIZE) {
+                        refreshLayout.finishRefreshWithNoMoreData()
+                    } else {
+                        refreshLayout.finishRefresh()
+                    }
+                }
+            }
+        }
+    }
+
+    private fun getChooseMoreData() {
+        when (inputType) {
+            0 -> {
+                viewModel.getType1Data().async(1000).bindLifeCycle(this).subscribe { list ->
+                    this.dataType1List.addAll(list)
+                    recyclerView.adapter?.notifyDataSetChanged()
+                    if (list.size < ConstantInt.PAGE_SIZE) {
+                        refreshLayout.finishLoadMoreWithNoMoreData()
+                    } else {
+                        refreshLayout.finishLoadMore()
+                    }
+                }
+            }
+            1 -> {
+                viewModel.getType2Data().async(1000).bindLifeCycle(this).subscribe { list ->
+                    this.dataType2List.addAll(list)
+                    recyclerView.adapter?.notifyDataSetChanged()
+                    if (list.size < ConstantInt.PAGE_SIZE) {
+                        refreshLayout.finishLoadMoreWithNoMoreData()
+                    } else {
+                        refreshLayout.finishLoadMore()
+                    }
+                }
+            }
+            else -> {
+                viewModel.getType3Data().async(1000).bindLifeCycle(this).subscribe { list ->
+                    this.dataType3List.addAll(list)
+                    recyclerView.adapter?.notifyDataSetChanged()
+                    if (list.size < ConstantInt.PAGE_SIZE) {
+                        refreshLayout.finishLoadMoreWithNoMoreData()
+                    } else {
+                        refreshLayout.finishLoadMore()
+                    }
+                }
+            }
+        }
+
+    }
+
+    private fun getNormalData() {
+        viewModel.start().async(1000).bindLifeCycle(this).subscribe { list ->
+            dataList.clear()
+            dataList.addAll(list)
+            when (inputType) {
+                0 -> {
+                    adapter1?.setData(dataList)
+                }
+                1 -> {
+                    adapter2?.setData(dataList)
+                }
+                else -> {
+                    adapter3?.setData(dataList)
+                }
+            }
+            for (index in 0 until expandableListView.expandableListAdapter!!.groupCount) {
+                expandableListView.expandGroup(index, false)
+            }
+            if (list.size < ConstantInt.PAGE_SIZE) {
+                refreshLayout.finishRefreshWithNoMoreData()
+            } else {
+                refreshLayout.finishRefresh()
+            }
+        }
+    }
+
+    private fun getNormalMoreData() {
+        viewModel.start().async(1000).bindLifeCycle(this).subscribe { list ->
+            dataList.addAll(list)
+            when (inputType) {
+                0 -> {
+                    adapter1?.addData(dataList)
+                }
+                1 -> {
+                    adapter2?.addData(dataList)
+                }
+                else -> {
+                    adapter3?.addData(dataList)
+                }
+            }
+            for (index in 0 until expandableListView.expandableListAdapter!!.groupCount) {
+                expandableListView.expandGroup(index, false)
+            }
+            if (list.size < ConstantInt.PAGE_SIZE) {
+                refreshLayout.finishLoadMoreWithNoMoreData()
+            } else {
+                refreshLayout.finishLoadMore()
+            }
+        }
+    }
+
+    class TypeList1Adapter(recyclerView: RecyclerView, data: ArrayList<Type1Data>?, layoutId: Int) :
+        RVAdapter<Type1Data>(recyclerView, data, layoutId) {
+
+        override fun showData(vHolder: ViewHolder?, data: Type1Data?, position: Int) {
+            val text1: TextView? = vHolder?.getView(R.id.text_1) as TextView?
+            val text2 = vHolder?.getView(R.id.text_2) as TextView?
+            val text3 = vHolder?.getView(R.id.text_3) as TextView?
+            val text4 = vHolder?.getView(R.id.text_4) as TextView?
+            val time = vHolder?.getView(R.id.text_time) as TextView?
+            text1?.text = MessageFormat.format("放电峰值:{0}", data?.value1)
+            text2?.text = MessageFormat.format("背景峰值:{0}", data?.value2)
+            text3?.text = MessageFormat.format("频率成分1:{0}", data?.value3)
+            text4?.text = MessageFormat.format("频率成分2:{0}", data?.value4)
+            time?.text = data?.time?.let { DataUtil.timeFormat(it, null) }
+        }
+    }
+
+    class TypeList2Adapter(recyclerView: RecyclerView, data: ArrayList<Type2Data>?, layoutId: Int) :
+        RVAdapter<Type2Data>(recyclerView, data, layoutId) {
+
+        override fun showData(vHolder: ViewHolder?, data: Type2Data?, position: Int) {
+            val text1: TextView? = vHolder?.getView(R.id.text_1) as TextView?
+            val text2 = vHolder?.getView(R.id.text_2) as TextView?
+            val text3 = vHolder?.getView(R.id.text_3) as TextView?
+            val time = vHolder?.getView(R.id.text_time) as TextView?
+            text1?.text = MessageFormat.format("放电峰值:{0}", data?.value1)
+            text2?.text = MessageFormat.format("背景峰值:{0}", data?.value2)
+            text3?.text = MessageFormat.format("图谱特征:{0}", data?.value3)
+            time?.text = data?.time?.let { DataUtil.timeFormat(it, null) }
+        }
+    }
+
+    class TypeList3Adapter(
+        recyclerView: RecyclerView,
+        data: ArrayList<Type3Data>?,
+        layoutId: Int
+    ) :
+        RVAdapter<Type3Data>(recyclerView, data, layoutId) {
+
+        override fun showData(vHolder: ViewHolder?, data: Type3Data?, position: Int) {
+            val text1: TextView? = vHolder?.getView(R.id.text_1) as TextView?
+            text1?.text = data?.time?.let { DataUtil.timeFormat(it, null) }
+            val layout = vHolder?.getView(R.id.layout) as LinearLayout?
+            layout?.removeAllViews()
+            data?.let {
+                for (item in it.items) {
+                    val view = LayoutType3(ISUOApplication.instance)
+                    view.setData(item.positionText, item.value1, item.value2)
+                    layout?.addView(view)
+                }
+            }
+        }
+    }
+
 }

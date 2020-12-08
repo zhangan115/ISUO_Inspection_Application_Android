@@ -30,9 +30,11 @@ class SearchSubViewModel(val taskRepository: TaskRepository) : ViewModel() {
 
     private fun searchSub(text: String?) {
         dataList.clear()
-        for (index in 0..3) {
-            dataList.add(SubstationBean(index.toLong(), "变电站$index"))
-        }
+//        for (index in 0..3) {
+//            dataList.add(SubstationBean(index.toLong(), "变电站$index"))
+//        }
+        dataList.add(SubstationBean(1L, "西安沣东110kV变电站"))
+        dataList.add(SubstationBean(2L, "西安丈八110kV变电站"))
         isLoading.value = true
         disposable = dataList.toObservable().toList().async(1000).subscribe { list ->
             isLoading.value = false

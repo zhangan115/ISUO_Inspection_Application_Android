@@ -8,9 +8,10 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
+import org.greenrobot.eventbus.EventBus
 import java.io.File
 
-abstract class BaseFragment<T : ViewDataBinding> : Fragment(){
+abstract class BaseFragment<T : ViewDataBinding> : Fragment() {
 
     open var photo: File? = null
 
@@ -42,6 +43,7 @@ abstract class BaseFragment<T : ViewDataBinding> : Fragment(){
         super.setUserVisibleHint(isVisibleToUser)
         isCanLoadData()
     }
+
     /**
      * 是否可以加载数据
      * 可以加载数据的条件：

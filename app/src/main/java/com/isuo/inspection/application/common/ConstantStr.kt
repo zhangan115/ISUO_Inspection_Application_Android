@@ -88,5 +88,7 @@ interface ConstantStr {
         const val TIMEOUT = -100
         const val ERROR_PASS = -101
         const val CLOSE_WORK = "close_work"
+        const val SEND_DATA = "send_data"
+        const val SEND_CHART_DATA = "send_chart_data"
     }
 }

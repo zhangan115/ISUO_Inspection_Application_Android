@@ -18,7 +18,7 @@
     <style name="AppTheme.NoActionBar.White">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <item name="colorPrimaryDark">@android:color/white</item>
+        <item name="colorPrimaryDark">@color/colorCommonGreyBg</item>
         <item name="popEnterAnim">@anim/slide_in_left</item>
         <item name="popExitAnim">@anim/slide_out_right</item>
         <item name="exitAnim">@anim/slide_out_left</item>

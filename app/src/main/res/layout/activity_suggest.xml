@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data class="SuggestDataBinding">
+
+        <import type="android.view.View" />
+
+        <import type="android.text.InputType" />
+
+        <variable
+            name="viewModel"
+            type="com.isuo.inspection.application.ui.user.suggest.SuggestViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorCommonGreyBg"
+        android:orientation="vertical"
+        app:toast="@{viewModel.toastStr}">
+
+        <include layout="@layout/toolbar" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="15dp"
+            android:background="@color/colorCommonWhiteBg"
+            android:orientation="vertical">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:afterTextChanged="@{viewModel.textChange}"
+                android:background="@null"
+                android:gravity="top"
+                android:hint="请输入"
+                android:lineSpacingExtra="2dp"
+                android:maxLength="256"
+                android:padding="10dp"
+                android:text="@={viewModel.contextText}"
+                android:textColor="@color/text_title"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
+                android:text="@{viewModel.textCount}"
+                android:textColor="@color/text_grey"
+                android:textSize="14sp" />
+
+        </RelativeLayout>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="28dp"
+            android:layout_marginRight="15dp"
+            android:gravity="center"
+            android:onClick="@{()->viewModel.toSub()}"
+            android:text="提交"
+            app:button_common_enable="@{viewModel.canClick}" />
+    </LinearLayout>
+</layout>

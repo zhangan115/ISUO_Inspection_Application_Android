@@ -19,7 +19,6 @@ class DataFilterActivity : AbsBaseActivity<DataFilterDataBinding>() {
 
     private val viewModel by viewModels<DataFilterViewModel> { getViewModelFactory() }
     private var checkType: Int = 0
-    private var positionText = -1
 
     override fun getToolBarTitle(): String? {
         return "数据筛选"
@@ -40,7 +39,7 @@ class DataFilterActivity : AbsBaseActivity<DataFilterDataBinding>() {
             intent.putExtra(ConstantStr.KEY_BUNDLE_STR, viewModel.startDate.value)
             intent.putExtra(ConstantStr.KEY_BUNDLE_STR_1, viewModel.endDate.value)
             if (checkType == 2) {
-                intent.putExtra(ConstantStr.KEY_BUNDLE_INT, positionText)
+                intent.putExtra(ConstantStr.KEY_BUNDLE_INT, viewModel.position.value)
             }
             setResult(Activity.RESULT_OK, intent)
             finish()

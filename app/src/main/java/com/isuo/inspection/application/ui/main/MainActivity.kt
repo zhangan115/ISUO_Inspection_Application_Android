@@ -64,7 +64,11 @@ class MainActivity : AbsBaseActivity<MainDataBinding>() {
             dataList.clear()
             dataList.addAll(list)
             recyclerView.adapter?.notifyDataSetChanged()
-            refreshLayout.finishRefresh()
+            if (list.size<ConstantInt.PAGE_SIZE){
+                refreshLayout.finishRefreshWithNoMoreData()
+            }else{
+                refreshLayout.finishRefresh()
+            }
         }
     }
 
@@ -76,12 +80,11 @@ class MainActivity : AbsBaseActivity<MainDataBinding>() {
         viewModel.loadMore().async(1000).bindLifeCycle(this).subscribe { list ->
             dataList.addAll(list)
             recyclerView.adapter?.notifyDataSetChanged()
-            if (dataList.size > ConstantInt.PAGE_SIZE) {
+            if (list.size < ConstantInt.PAGE_SIZE) {
                 refreshLayout.finishLoadMoreWithNoMoreData()
             } else {
-                refreshLayout.finishLoadMore(true)
+                refreshLayout.finishRefresh()
             }
-
         }
     }
 

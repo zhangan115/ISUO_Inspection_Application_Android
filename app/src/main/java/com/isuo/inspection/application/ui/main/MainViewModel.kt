@@ -21,9 +21,9 @@ class MainViewModel(
     var toastStr: MutableLiveData<String> = MutableLiveData()
     var requestState: MutableLiveData<Int> = MutableLiveData()
 
-    var count1Str: MutableLiveData<String> = MutableLiveData("10")
-    var count2Str: MutableLiveData<String> = MutableLiveData("20")
-    var count3Str: MutableLiveData<String> = MutableLiveData("7650")
+    var count1Str: MutableLiveData<String> = MutableLiveData("2")
+    var count2Str: MutableLiveData<String> = MutableLiveData("8")
+    var count3Str: MutableLiveData<String> = MutableLiveData("1120")
 
     var searchText: MutableLiveData<String> = MutableLiveData()
 
@@ -51,17 +51,19 @@ class MainViewModel(
 
     fun start(): Single<List<SubstationBean>> {
         dataList.clear()
-        for (index in 0..10) {
-            dataList.add(SubstationBean(index.toLong(), "变电站$index"))
-        }
+//        for (index in 0..10) {
+//            dataList.add(SubstationBean(index.toLong(), "变电站$index"))
+//        }
+        dataList.add(SubstationBean(1L, "西安沣东110kV变电站"))
+        dataList.add(SubstationBean(2L, "西安丈八110kV变电站"))
         return dataList.toObservable().toList()
     }
 
     fun loadMore(): Single<List<SubstationBean>> {
         val oldSize = dataList.size
-        for (index in 0..10) {
-            dataList.add(SubstationBean((oldSize + index).toLong(), "变电站" + (oldSize + index)))
-        }
+//        for (index in 0..10) {
+//            dataList.add(SubstationBean((oldSize + index).toLong(), "变电站" + (oldSize + index)))
+//        }
         return dataList.toObservable().toList()
     }
 

@@ -124,6 +124,15 @@
             android:windowSoftInputMode="adjustPan|stateHidden" />
 
         <activity
+            android:name=".ui.user.suggest.SuggestActivity"
+            android:allowTaskReparenting="true"
+            android:configChanges="orientation|keyboardHidden"
+            android:launchMode="singleTask"
+            android:screenOrientation="nosensor"
+            android:taskAffinity="${TASK_AFFINITY_VALUE}"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+
+        <activity
             android:name="com.sito.tool.library.activity.ShowPhotoListActivity"
             android:theme="@style/AppTheme.NoActionBar.Black" />
 

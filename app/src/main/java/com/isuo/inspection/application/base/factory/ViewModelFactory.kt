@@ -36,6 +36,7 @@ import com.isuo.inspection.application.ui.main.input.InputViewModel
 import com.isuo.inspection.application.ui.main.search.SearchSubViewModel
 import com.isuo.inspection.application.ui.splash.SplashViewModel
 import com.isuo.inspection.application.ui.user.forget_pass.ForgetPassViewModel
+import com.isuo.inspection.application.ui.user.suggest.SuggestViewModel
 import com.isuo.inspection.application.ui.user.user_center.UserCenterViewModel
 
 /**
@@ -84,6 +85,8 @@ class ViewModelFactory constructor(
                 ChartViewModel(taskRepository)
             isAssignableFrom(HistoryListViewModel::class.java) ->
                 HistoryListViewModel(taskRepository)
+            isAssignableFrom(SuggestViewModel::class.java) ->
+                SuggestViewModel(userRepository)
             else ->
                 throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
         }

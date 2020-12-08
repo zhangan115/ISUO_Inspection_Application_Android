@@ -40,5 +40,13 @@
     <color name="main_blue_color">#02948F</color>
     <color name="main_red_color">#D6011F</color>
     <color name="line_select_color">#028A81</color>
+    <!-- line color   -->
+    <color name="line_chart_color_1">#f6b433</color>
+    <color name="line_chart_color_2">#69A7fb</color>
+    <color name="line_chart_color_3">#58ce79</color>
+    <color name="line_chart_color_4">#f05340</color>
+    <color name="line_chart_color_5">#ED60DF</color>
+
+    <color name="chart_line">#C1C1C1</color>
 
 </resources>

@@ -12,6 +12,7 @@ import com.isuo.inspection.application.base.ext.getViewModelFactory
 import com.isuo.inspection.application.base.ext.showChoosePhotoDialog
 import com.isuo.inspection.application.databinding.UserCenterDataBinding
 import com.isuo.inspection.application.ui.user.forget_pass.ForgetPassActivity
+import com.isuo.inspection.application.ui.user.suggest.SuggestActivity
 import com.isuo.inspection.application.ui.user.user_info.UserInfoActivity
 import com.isuo.inspection.application.utils.EventObserver
 import java.io.File
@@ -32,7 +33,7 @@ class UserCenterActivity : AbsBaseActivity<UserCenterDataBinding>() {
             startActivity(Intent(this, ForgetPassActivity::class.java))
         })
         viewModel.toSuggest.observe(this, EventObserver {
-
+            startActivity(Intent(this, SuggestActivity::class.java))
         })
         viewModel.toCheckNewVersion.observe(this, EventObserver {
 
