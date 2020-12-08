@@ -38,7 +38,7 @@ android {
 
     flavorDimensions "default"
     productFlavors {
-        electricaltest_app_default {
+        inspection_app_default {
             applicationId "com.isuo.inspection.application"
             dimension "default"
             resValue "string", "app_name", "点检"
