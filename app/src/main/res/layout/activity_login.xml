@@ -17,7 +17,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorWhite">
+        android:background="@color/colorCommonGreyBg">
 
         <LinearLayout
             android:id="@+id/login_layout"
@@ -84,7 +84,7 @@
                         android:layout_height="44dp"
                         android:layout_marginLeft="12dp"
                         android:afterTextChanged="@{viewModel.textChange}"
-                        android:background="@color/colorWhite"
+                        android:background="@null"
                         android:hint="请输入手机号"
                         android:inputType="phone"
                         android:maxLength="11"
@@ -98,9 +98,9 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@{viewModel.name.length() == 0 ?@color/color_divide:@color/line_select_color}"
                     android:layout_marginLeft="25dp"
-                    android:layout_marginRight="25dp" />
+                    android:layout_marginRight="25dp"
+                    android:background="@{viewModel.name.length() == 0 ?@color/color_divide:@color/line_select_color}" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -123,7 +123,7 @@
                         android:layout_marginLeft="10dp"
                         android:layout_weight="1"
                         android:afterTextChanged="@{viewModel.textChange}"
-                        android:background="@color/colorWhite"
+                        android:background="@null"
                         android:hint="@string/login_hit_use_pass"
                         android:inputType="textPassword"
                         android:text="@={viewModel.pass}"

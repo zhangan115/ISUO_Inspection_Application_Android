@@ -40,7 +40,7 @@
             android:launchMode="singleTask"
             android:screenOrientation="nosensor"
             android:taskAffinity="${TASK_AFFINITY_VALUE}"
-            android:theme="@style/AppTheme.NoActionBar.White"
+            android:theme="@style/AppTheme.NoActionBar.Gray"
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
             android:name="com.isuo.inspection.application.ui.user.forget_pass.ForgetPassActivity"
