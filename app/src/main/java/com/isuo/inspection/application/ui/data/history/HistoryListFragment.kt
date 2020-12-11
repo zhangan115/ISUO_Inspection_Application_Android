@@ -22,6 +22,7 @@ import com.isuo.inspection.application.ui.data.history.adapter.Type2Adapter
 import com.isuo.inspection.application.ui.data.history.adapter.Type3Adapter
 import com.isuo.inspection.application.ui.data.history.widget.LayoutType3
 import com.isuo.inspection.application.utils.DataUtil
+import com.isuo.inspection.application.utils.EventObserver
 import kotlinx.android.synthetic.main.fragment_history_list.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -130,6 +131,32 @@ class HistoryListFragment : BaseFragment<HistoryListDataBinding>() {
         refreshLayout.setOnLoadMoreListener {
             loadMoreData()
         }
+        viewModel.showResult.observe(this, EventObserver {
+            adapter1?.setData(it)
+            adapter2?.setData(it)
+            adapter3?.setData(it)
+            for (index in 0 until expandableListView.expandableListAdapter!!.groupCount) {
+                expandableListView.expandGroup(index, false)
+            }
+            if (it.size < ConstantInt.PAGE_SIZE) {
+                refreshLayout.finishRefreshWithNoMoreData()
+            } else {
+                refreshLayout.finishRefresh()
+            }
+        })
+        viewModel.showMoreResult.observe(this, EventObserver {
+            adapter1?.addData(it)
+            adapter2?.addData(it)
+            adapter3?.addData(it)
+            for (index in 0 until expandableListView.expandableListAdapter!!.groupCount) {
+                expandableListView.expandGroup(index, false)
+            }
+            if (it.size < ConstantInt.PAGE_SIZE) {
+                refreshLayout.finishLoadMoreWithNoMoreData()
+            } else {
+                refreshLayout.finishLoadMore()
+            }
+        })
         refreshLayout.autoRefresh()
     }
 
@@ -249,54 +276,10 @@ class HistoryListFragment : BaseFragment<HistoryListDataBinding>() {
 
     private fun getNormalData() {
         viewModel.start()
-//        viewModel.start().async(1000).bindLifeCycle(this).subscribe { list ->
-//            dataList.clear()
-//            dataList.addAll(list)
-//            when (inputType) {
-//                0 -> {
-//                    adapter1?.setData(dataList)
-//                }
-//                1 -> {
-//                    adapter2?.setData(dataList)
-//                }
-//                else -> {
-//                    adapter3?.setData(dataList)
-//                }
-//            }
-//            for (index in 0 until expandableListView.expandableListAdapter!!.groupCount) {
-//                expandableListView.expandGroup(index, false)
-//            }
-//            if (list.size < ConstantInt.PAGE_SIZE) {
-//                refreshLayout.finishRefreshWithNoMoreData()
-//            } else {
-//                refreshLayout.finishRefresh()
-//            }
-//        }
     }
 
     private fun getNormalMoreData() {
-//        viewModel.start().async(1000).bindLifeCycle(this).subscribe { list ->
-//            dataList.addAll(list)
-//            when (inputType) {
-//                0 -> {
-//                    adapter1?.addData(dataList)
-//                }
-//                1 -> {
-//                    adapter2?.addData(dataList)
-//                }
-//                else -> {
-//                    adapter3?.addData(dataList)
-//                }
-//            }
-//            for (index in 0 until expandableListView.expandableListAdapter!!.groupCount) {
-//                expandableListView.expandGroup(index, false)
-//            }
-//            if (list.size < ConstantInt.PAGE_SIZE) {
-//                refreshLayout.finishLoadMoreWithNoMoreData()
-//            } else {
-//                refreshLayout.finishLoadMore()
-//            }
-//        }
+
     }
 
     class TypeList1Adapter(recyclerView: RecyclerView, data: ArrayList<Type1Data>?, layoutId: Int) :
@@ -344,11 +327,11 @@ class HistoryListFragment : BaseFragment<HistoryListDataBinding>() {
             val layout = vHolder?.getView(R.id.layout) as LinearLayout?
             layout?.removeAllViews()
             data?.let {
-                for (item in it.items) {
-                    val view = LayoutType3(ISUOApplication.instance)
-                    view.setData(item.positionText, item.value1, item.value2)
-                    layout?.addView(view)
-                }
+//                for (item in it.items) {
+//                    val view = LayoutType3(ISUOApplication.instance)
+//                    view.setData(item.positionText, item.value1, item.value2)
+//                    layout?.addView(view)
+//                }
             }
         }
     }

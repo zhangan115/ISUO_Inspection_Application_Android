@@ -104,24 +104,26 @@ data class HistoryData(
 data class Type1Data(
     val id: Long,
     val time: Long,
-    val value1: String,
-    val value2: String,
-    val value3: String,
-    val value4: String
+    val value1: String?,
+    val value2: String?,
+    val value3: String?,
+    val value4: String?
 )
 
 data class Type2Data(
     val id: Long,
     val time: Long,
-    val value1: String,
-    val value2: String,
-    val value3: String
+    val value1: String?,
+    val value2: String?,
+    val value3: String?
 )
 
 data class Type3Data(
     val id: Long,
     val time: Long,
-    val items: ArrayList<Type3ItemBean>
+    val value1: String?,
+    val value2: String?,
+    val positionText: String?
 )
 
 data class Type3ItemBean(

@@ -61,4 +61,26 @@ data class MeasuringListBean(
     val state: Int
 )
 
+data class HistoryNetData(
+    val dataTime: String,
+    var dataList: List<HistoryDataInfo>?
+)
+
+class HistoryDataInfo {
+    var dataType: Int? = null
+    var substationId: Long? = null
+    var substationName: String? = null
+    var equipmentId: Long? = null
+    var equipmentName: String? = null
+    var positionId: Long? = null
+    var positionName: String? = null
+    var peakValue: String? = null
+    var backgroundPeakValue: String? = null
+    var frequencyComponent1: String? = null
+    var frequencyComponent2: String? = null
+    var picNode: String? = null
+    var ultrasounId: Long = 0L
+    var createTime: Long = 0L
+}
+
 

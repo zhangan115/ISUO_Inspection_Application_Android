@@ -58,8 +58,8 @@ class DataBaseActivity : AbsBaseActivity<DataBaseDataBinding>() {
             val msg = MessageEvent()
             val startTime = data?.getStringExtra(ConstantStr.KEY_BUNDLE_STR)
             val endTime = data?.getStringExtra(ConstantStr.KEY_BUNDLE_STR_1)
-            val positionId = data?.getIntExtra(ConstantStr.KEY_BUNDLE_INT, -1)
-            if (positionId == -1) {
+            val positionId = data?.getLongExtra(ConstantStr.KEY_BUNDLE_INT, -1L)
+            if (positionId == -1L) {
                 msg.MessageEvent(ConstantStr.SEND_DATA, startTime, endTime, null)
             } else {
                 msg.MessageEvent(ConstantStr.SEND_DATA, startTime, endTime, positionId)

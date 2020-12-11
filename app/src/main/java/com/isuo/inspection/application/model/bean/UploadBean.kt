@@ -17,5 +17,5 @@ class UploadDataInfo {
     var frequencyComponent1: String? = null
     var frequencyComponent2: String? = null
     var picNode: String? = null
-
+    var ultrasounId: Long = 0L
 }

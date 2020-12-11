@@ -27,7 +27,7 @@ class ChartViewModel(val taskRepository: TaskRepository) : ViewModel() {
 
     var positionText: MutableLiveData<String> = MutableLiveData("")
 
-    var positionId = -1
+    var positionId = -1L
 
     private val positionList =
         listOf("前中", "前下", "左上", "左中", "左下", "右上", "右中", "右下", "后上", "后中", "后下")
@@ -60,8 +60,8 @@ class ChartViewModel(val taskRepository: TaskRepository) : ViewModel() {
                 )
             list2.add(bean)
         }
-        if (positionId != -1) {
-            positionText.value = positionList[positionId]
+        if (positionId != -1L) {
+            positionText.value = positionList[positionId.toInt()]
         } else {
             positionText.value = ""
         }
@@ -75,7 +75,7 @@ class ChartViewModel(val taskRepository: TaskRepository) : ViewModel() {
                     positionText.value!!
                 )
             )
-            list3.add(Type3Data(index.toLong(), System.currentTimeMillis(), items))
+//            list3.add(Type3Data(index.toLong(), System.currentTimeMillis(), items))
         }
         dataList.add(
             HistoryData(

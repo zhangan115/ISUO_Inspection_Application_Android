@@ -4,6 +4,7 @@ import android.content.Context
 import com.isuo.inspection.application.app.ISUOApplication
 import com.isuo.inspection.application.model.api.DataApi
 import com.isuo.inspection.application.model.bean.BaseEntity
+import com.isuo.inspection.application.model.bean.HistoryNetData
 import org.json.JSONObject
 import retrofit2.Call
 
@@ -12,10 +13,10 @@ class DataRepository(private val content: Context) {
     fun getHistoryData(
         equipmentId: Long,
         dataType: Int,
-        positionId: Int?,
+        positionId: Long?,
         startTime: String? = null,
         endTime: String? = null
-    ): Call<BaseEntity<String>> {
+    ): Call<BaseEntity<ArrayList<HistoryNetData>>> {
         val remote = ISUOApplication.retrofit.create(DataApi::class.java)
         val jsonObject = JSONObject()
         jsonObject.put("dataType", dataType)

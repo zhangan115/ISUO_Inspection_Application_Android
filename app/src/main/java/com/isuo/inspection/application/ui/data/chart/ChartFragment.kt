@@ -108,19 +108,19 @@ class ChartFragment : BaseFragment<ChartDataBinding>() {
                             for (item in list[0].type1DataList!!) {
                                 val data1 = ChartBean.Data()
                                 data1.value = item.time
-                                data1.dataValue = item.value1.toFloat()
+//                                data1.dataValue = item.value1.toFloat()
                                 list1.add(data1)
                                 val data2 = ChartBean.Data()
                                 data2.value = item.time
-                                data2.dataValue = item.value2.toFloat()
+//                                data2.dataValue = item.value2.toFloat()
                                 list2.add(data2)
                                 val data3 = ChartBean.Data()
                                 data3.value = item.time
-                                data3.dataValue = item.value3.toFloat()
+//                                data3.dataValue = item.value3.toFloat()
                                 list3.add(data3)
                                 val data4 = ChartBean.Data()
                                 data4.value = item.time
-                                data4.dataValue = item.value4.toFloat()
+//                                data4.dataValue = item.value4.toFloat()
                                 list4.add(data4)
                             }
 
@@ -146,11 +146,11 @@ class ChartFragment : BaseFragment<ChartDataBinding>() {
                             for (item in list[0].type2DataList!!) {
                                 val data1 = ChartBean.Data()
                                 data1.value = item.time
-                                data1.dataValue = item.value1.toFloat()
+//                                data1.dataValue = item.value1.toFloat()
                                 list1.add(data1)
                                 val data2 = ChartBean.Data()
                                 data2.value = item.time
-                                data2.dataValue = item.value2.toFloat()
+//                                data2.dataValue = item.value2.toFloat()
                                 list2.add(data2)
                             }
 
@@ -171,11 +171,11 @@ class ChartFragment : BaseFragment<ChartDataBinding>() {
                         if (list.size == 1) {
                             for (item in list[0].type3DataList!!) {
                                 val data1 = ChartBean.Data()
-                                data1.dataValue = item.items[0].value1.toFloat()
+//                                data1.dataValue = item.items[0].value1.toFloat()
                                 data1.value = item.time
                                 list1.add(data1)
                                 val data2 = ChartBean.Data()
-                                data2.dataValue = item.items[0].value2.toFloat()
+//                                data2.dataValue = item.items[0].value2.toFloat()
                                 data2.value = item.time
                                 list2.add(data2)
                             }

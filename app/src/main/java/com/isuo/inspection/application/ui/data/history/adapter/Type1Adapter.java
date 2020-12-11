@@ -2,6 +2,7 @@ package com.isuo.inspection.application.ui.data.history.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -113,12 +114,28 @@ public class Type1Adapter extends BaseExpandableListAdapter {
         } else {
             holder = (ChildViewHolder) convertView.getTag();
         }
-        Type1Data bean = data.get(groupPosition).getType1DataList().get(childPosition);
+        Type1Data bean = Objects.requireNonNull(data.get(groupPosition).getType1DataList()).get(childPosition);
         if (bean != null) {
-            holder.value1Text.setText(MessageFormat.format("放电峰值:{0}", bean.getValue1()));
-            holder.value2Text.setText(MessageFormat.format("背景峰值:{0}", bean.getValue2()));
-            holder.value3Text.setText(MessageFormat.format("频率成分1:{0}", bean.getValue3()));
-            holder.value4Text.setText(MessageFormat.format("频率成分2:{0}", bean.getValue4()));
+            if (TextUtils.isEmpty(bean.getValue1())) {
+                holder.value1Text.setText(MessageFormat.format("放电峰值:{0}", ""));
+            } else {
+                holder.value1Text.setText(MessageFormat.format("放电峰值:{0}", bean.getValue1()));
+            }
+            if (TextUtils.isEmpty(bean.getValue2())) {
+                holder.value2Text.setText(MessageFormat.format("背景峰值:{0}", ""));
+            } else {
+                holder.value2Text.setText(MessageFormat.format("背景峰值:{0}", bean.getValue2()));
+            }
+            if (TextUtils.isEmpty(bean.getValue3())) {
+                holder.value3Text.setText(MessageFormat.format("频率成分1:{0}", ""));
+            } else {
+                holder.value3Text.setText(MessageFormat.format("频率成分1:{0}", bean.getValue3()));
+            }
+            if (TextUtils.isEmpty(bean.getValue4())) {
+                holder.value4Text.setText(MessageFormat.format("频率成分2:{0}", ""));
+            } else {
+                holder.value4Text.setText(MessageFormat.format("频率成分2:{0}", bean.getValue4()));
+            }
         }
         return convertView;
     }

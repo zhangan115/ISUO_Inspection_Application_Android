@@ -4,9 +4,9 @@ class MessageEvent {
     var message: String? = null
     var startTime: String? = null
     var endTime: String? = null
-    var positionId: Int? = null
+    var positionId: Long? = null
 
-    fun MessageEvent(message: String?, startTime: String?, endTime: String?, positionId: Int?) {
+    fun MessageEvent(message: String?, startTime: String?, endTime: String?, positionId: Long?) {
         this.message = message
         this.startTime = startTime
         this.endTime = endTime
