@@ -137,10 +137,11 @@ class InputActivity : AbsBaseActivity<InputDataBinding>() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.menu_history) {
             val intent = Intent(this, DataBaseActivity::class.java)
-            intent.putExtra(ConstantStr.KEY_BUNDLE_STR, deviceName)
-            intent.putExtra(ConstantStr.KEY_BUNDLE_STR_1, checkPosition)
-            intent.putExtra(ConstantStr.KEY_BUNDLE_INT, checkType)
             intent.putExtra(ConstantStr.KEY_BUNDLE_LONG, deviceId)
+            intent.putExtra(ConstantStr.KEY_BUNDLE_STR, deviceName)
+            intent.putExtra(ConstantStr.KEY_BUNDLE_INT, checkType)
+            intent.putExtra(ConstantStr.KEY_BUNDLE_STR_1, viewModel.equipmentTypeCode)
+            intent.putExtra(ConstantStr.KEY_BUNDLE_STR_2, viewModel.checkPosition.value)
             startActivity(intent)
         }
         return true

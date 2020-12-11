@@ -13,14 +13,12 @@ import com.isuo.inspection.application.base.AbsBaseActivity
 import com.isuo.inspection.application.base.ext.getViewModelFactory
 import com.isuo.inspection.application.common.ConstantStr
 import com.isuo.inspection.application.databinding.DataBaseDataBinding
-import com.isuo.inspection.application.model.bean.MessageChartEvent
 import com.isuo.inspection.application.model.bean.MessageEvent
 import com.isuo.inspection.application.ui.data.chart.ChartFragment
 import com.isuo.inspection.application.ui.data.filter.DataFilterActivity
 import com.isuo.inspection.application.ui.data.history.HistoryListFragment
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItemAdapter
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems
-import com.orhanobut.logger.Logger
 import kotlinx.android.synthetic.main.activity_data_base.*
 import org.greenrobot.eventbus.EventBus
 
@@ -29,7 +27,9 @@ class DataBaseActivity : AbsBaseActivity<DataBaseDataBinding>() {
     private val viewModel by viewModels<DataBaseViewModel> { getViewModelFactory() }
 
     private var deviceName: String? = null
-    private var inputType: Int = 0
+    private var equipmentTypeCode: String? = null
+    private var measuringName: String? = null
+    private var checkType: Int = 0
     var deviceId: Long = 0L
     var checkPosition: String? = null
 
@@ -45,7 +45,8 @@ class DataBaseActivity : AbsBaseActivity<DataBaseDataBinding>() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.menu_filter) {
             val intent = Intent(this, DataFilterActivity::class.java)
-            intent.putExtra(ConstantStr.KEY_BUNDLE_INT, inputType)
+            intent.putExtra(ConstantStr.KEY_BUNDLE_INT, checkType)
+            intent.putExtra(ConstantStr.KEY_BUNDLE_STR, equipmentTypeCode)
             startActivityForResult(intent, 10001)
         }
         return true
@@ -70,9 +71,9 @@ class DataBaseActivity : AbsBaseActivity<DataBaseDataBinding>() {
     override fun initView(savedInstanceState: Bundle?) {
         val bundle1 = Bundle()
         bundle1.putString(ConstantStr.KEY_BUNDLE_STR, deviceName)
-        bundle1.putString(ConstantStr.KEY_BUNDLE_STR_1, "xxxxx")
-        bundle1.putInt(ConstantStr.KEY_BUNDLE_INT, inputType)
         bundle1.putLong(ConstantStr.KEY_BUNDLE_LONG, deviceId)
+        bundle1.putString(ConstantStr.KEY_BUNDLE_STR_1, measuringName)
+        bundle1.putInt(ConstantStr.KEY_BUNDLE_INT, checkType)
 
         val adapter = FragmentPagerItemAdapter(
             supportFragmentManager
@@ -123,10 +124,11 @@ class DataBaseActivity : AbsBaseActivity<DataBaseDataBinding>() {
 
     override fun initData(savedInstanceState: Bundle?) {
         dataBinding.viewModel = viewModel
-        deviceName = intent.getStringExtra(ConstantStr.KEY_BUNDLE_STR)
-        checkPosition = intent.getStringExtra(ConstantStr.KEY_BUNDLE_STR_1)
-        inputType = intent.getIntExtra(ConstantStr.KEY_BUNDLE_INT, -1)
         deviceId = intent.getLongExtra(ConstantStr.KEY_BUNDLE_LONG, -1L)
+        deviceName = intent.getStringExtra(ConstantStr.KEY_BUNDLE_STR)
+        checkType = intent.getIntExtra(ConstantStr.KEY_BUNDLE_INT, -1)
+        equipmentTypeCode = intent.getStringExtra(ConstantStr.KEY_BUNDLE_STR_1)
+        measuringName = intent.getStringExtra(ConstantStr.KEY_BUNDLE_STR_2)
     }
 
     override fun getContentView(): Int {

@@ -63,22 +63,19 @@ class HistoryListFragment : BaseFragment<HistoryListDataBinding>() {
         return R.layout.fragment_history_list
     }
 
+    private var checkType: Int = 0
     private var deviceName: String? = null
-    private var inputType: Int = 0
-    var deviceId: Long = 0L
-    var checkPosition: String? = null
 
     override fun initData() {
-        inputType = arguments?.getInt(ConstantStr.KEY_BUNDLE_INT)!!
+        checkType = arguments?.getInt(ConstantStr.KEY_BUNDLE_INT)!!
         deviceName = arguments?.getString(ConstantStr.KEY_BUNDLE_STR)
-        checkPosition = arguments?.getString(ConstantStr.KEY_BUNDLE_STR_1)
-        inputType = arguments?.getInt(ConstantStr.KEY_BUNDLE_INT)!!
-        deviceId = arguments?.getLong(ConstantStr.KEY_BUNDLE_LONG, -1L)!!
-        if (inputType == 2) {
-            viewModel.showPositionView.value = false
+        viewModel.measuringName.value = arguments?.getString(ConstantStr.KEY_BUNDLE_STR_1)
+        checkType = arguments?.getInt(ConstantStr.KEY_BUNDLE_INT)!!
+        viewModel.deviceId = arguments?.getLong(ConstantStr.KEY_BUNDLE_LONG, -1L)!!
+        if (checkType == 2) {
+            viewModel.showMeasuringView.value = false
         }
-        viewModel.checkPosition.value = checkPosition
-        viewModel.checkType.value = viewModel.nameList[inputType]
+        viewModel.checkType.value = viewModel.nameList[checkType]
     }
 
     private var adapter1: Type1Adapter? = null
@@ -88,7 +85,7 @@ class HistoryListFragment : BaseFragment<HistoryListDataBinding>() {
     override fun initView() {
         expandableListView.setOnGroupClickListener({ _, _, _, _ -> true }, false)
         recyclerView.layoutManager = LinearLayoutManager(activity)
-        when (inputType) {
+        when (checkType) {
             0 -> {
                 adapter1 = Type1Adapter(
                     activity,
@@ -153,7 +150,7 @@ class HistoryListFragment : BaseFragment<HistoryListDataBinding>() {
         }
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN,sticky = false)
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = false)
     fun onEventMainThread(message: MessageEvent) {
         if (message.message == ConstantStr.SEND_DATA) {
             viewModel.showChooseDate.value = message.startTime + "至" + message.endTime
@@ -170,7 +167,7 @@ class HistoryListFragment : BaseFragment<HistoryListDataBinding>() {
     }
 
     private fun getChooseData() {
-        when (inputType) {
+        when (checkType) {
             0 -> {
                 viewModel.getType1Data().async(1000).bindLifeCycle(this).subscribe { list ->
                     this.dataType1List.clear()
@@ -211,7 +208,7 @@ class HistoryListFragment : BaseFragment<HistoryListDataBinding>() {
     }
 
     private fun getChooseMoreData() {
-        when (inputType) {
+        when (checkType) {
             0 -> {
                 viewModel.getType1Data().async(1000).bindLifeCycle(this).subscribe { list ->
                     this.dataType1List.addAll(list)
@@ -250,54 +247,55 @@ class HistoryListFragment : BaseFragment<HistoryListDataBinding>() {
     }
 
     private fun getNormalData() {
-        viewModel.start().async(1000).bindLifeCycle(this).subscribe { list ->
-            dataList.clear()
-            dataList.addAll(list)
-            when (inputType) {
-                0 -> {
-                    adapter1?.setData(dataList)
-                }
-                1 -> {
-                    adapter2?.setData(dataList)
-                }
-                else -> {
-                    adapter3?.setData(dataList)
-                }
-            }
-            for (index in 0 until expandableListView.expandableListAdapter!!.groupCount) {
-                expandableListView.expandGroup(index, false)
-            }
-            if (list.size < ConstantInt.PAGE_SIZE) {
-                refreshLayout.finishRefreshWithNoMoreData()
-            } else {
-                refreshLayout.finishRefresh()
-            }
-        }
+        viewModel.start()
+//        viewModel.start().async(1000).bindLifeCycle(this).subscribe { list ->
+//            dataList.clear()
+//            dataList.addAll(list)
+//            when (inputType) {
+//                0 -> {
+//                    adapter1?.setData(dataList)
+//                }
+//                1 -> {
+//                    adapter2?.setData(dataList)
+//                }
+//                else -> {
+//                    adapter3?.setData(dataList)
+//                }
+//            }
+//            for (index in 0 until expandableListView.expandableListAdapter!!.groupCount) {
+//                expandableListView.expandGroup(index, false)
+//            }
+//            if (list.size < ConstantInt.PAGE_SIZE) {
+//                refreshLayout.finishRefreshWithNoMoreData()
+//            } else {
+//                refreshLayout.finishRefresh()
+//            }
+//        }
     }
 
     private fun getNormalMoreData() {
-        viewModel.start().async(1000).bindLifeCycle(this).subscribe { list ->
-            dataList.addAll(list)
-            when (inputType) {
-                0 -> {
-                    adapter1?.addData(dataList)
-                }
-                1 -> {
-                    adapter2?.addData(dataList)
-                }
-                else -> {
-                    adapter3?.addData(dataList)
-                }
-            }
-            for (index in 0 until expandableListView.expandableListAdapter!!.groupCount) {
-                expandableListView.expandGroup(index, false)
-            }
-            if (list.size < ConstantInt.PAGE_SIZE) {
-                refreshLayout.finishLoadMoreWithNoMoreData()
-            } else {
-                refreshLayout.finishLoadMore()
-            }
-        }
+//        viewModel.start().async(1000).bindLifeCycle(this).subscribe { list ->
+//            dataList.addAll(list)
+//            when (inputType) {
+//                0 -> {
+//                    adapter1?.addData(dataList)
+//                }
+//                1 -> {
+//                    adapter2?.addData(dataList)
+//                }
+//                else -> {
+//                    adapter3?.addData(dataList)
+//                }
+//            }
+//            for (index in 0 until expandableListView.expandableListAdapter!!.groupCount) {
+//                expandableListView.expandGroup(index, false)
+//            }
+//            if (list.size < ConstantInt.PAGE_SIZE) {
+//                refreshLayout.finishLoadMoreWithNoMoreData()
+//            } else {
+//                refreshLayout.finishLoadMore()
+//            }
+//        }
     }
 
     class TypeList1Adapter(recyclerView: RecyclerView, data: ArrayList<Type1Data>?, layoutId: Int) :

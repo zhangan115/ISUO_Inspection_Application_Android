@@ -8,7 +8,6 @@ import com.isuo.inspection.application.model.api.OkHttpManager
 import com.isuo.inspection.application.model.bean.*
 import com.isuo.inspection.application.repository.TaskRepository
 import com.isuo.inspection.application.utils.Event
-import io.reactivex.disposables.Disposable
 
 class InputViewModel(var taskRepository: TaskRepository) : ViewModel() {
 
@@ -26,8 +25,6 @@ class InputViewModel(var taskRepository: TaskRepository) : ViewModel() {
 
     private val _uploadSuccess = MutableLiveData<Event<Unit>>()
     val uploadSuccess: LiveData<Event<Unit>> = _uploadSuccess
-
-    var disposable: Disposable? = null
 
     var dataList1 = ArrayList<InputType1>()
     var dataList2 = ArrayList<InputType2>()

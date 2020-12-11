@@ -1,5 +1,7 @@
 package com.isuo.inspection.application.model.bean
 
+import android.os.Parcelable
+
 
 data class HomePageBean(
     val dataCount: Int,

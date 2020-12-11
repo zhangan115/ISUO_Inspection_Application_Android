@@ -9,14 +9,11 @@ import com.isuo.inspection.application.BR
 import com.isuo.inspection.application.R
 import com.isuo.inspection.application.adapter.GenericQuickAdapter
 import com.isuo.inspection.application.base.AbsBaseActivity
-import com.isuo.inspection.application.base.ext.async
-import com.isuo.inspection.application.base.ext.bindLifeCycle
 import com.isuo.inspection.application.base.ext.getViewModelFactory
 import com.isuo.inspection.application.common.ConstantInt
 import com.isuo.inspection.application.common.ConstantStr
 import com.isuo.inspection.application.databinding.MainDataBinding
 import com.isuo.inspection.application.model.bean.SubstationBean
-import com.isuo.inspection.application.model.bean.SubstationNetBean
 import com.isuo.inspection.application.ui.main.check_item.SubCheckItemActivity
 import com.isuo.inspection.application.ui.main.search.SearchSubActivity
 import com.isuo.inspection.application.ui.user.user_center.UserCenterActivity
@@ -61,17 +58,17 @@ class MainActivity : AbsBaseActivity<MainDataBinding>() {
             refreshLayout.finishRefreshWithNoMoreData()
         })
         refreshLayout.setOnRefreshListener {
-            requestData()
+            viewModel.start()
         }
     }
 
     override fun requestData() {
+        viewModel.requestState.value = ConstantInt.REQUEST_STATE_LOADING
         viewModel.start()
     }
 
     override fun initData(savedInstanceState: Bundle?) {
         dataBinding.viewModel = viewModel
-        viewModel.requestState.value = ConstantInt.REQUEST_STATE_LOADING
     }
 
     override fun getContentView(): Int {

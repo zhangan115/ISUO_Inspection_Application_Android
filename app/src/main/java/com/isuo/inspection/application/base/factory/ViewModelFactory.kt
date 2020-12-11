@@ -84,7 +84,7 @@ class ViewModelFactory constructor(
             isAssignableFrom(ChartViewModel::class.java) ->
                 ChartViewModel(taskRepository)
             isAssignableFrom(HistoryListViewModel::class.java) ->
-                HistoryListViewModel(taskRepository)
+                HistoryListViewModel(dataRepository)
             isAssignableFrom(SuggestViewModel::class.java) ->
                 SuggestViewModel(userRepository)
             else ->

@@ -9,15 +9,9 @@ import com.isuo.inspection.application.model.api.OkHttpManager
 import com.isuo.inspection.application.model.bean.BaseEntity
 import com.isuo.inspection.application.model.bean.HomePageBean
 import com.isuo.inspection.application.model.bean.SubstationBean
-import com.isuo.inspection.application.model.bean.SubstationNetBean
 import com.isuo.inspection.application.repository.TaskRepository
-import com.isuo.inspection.application.repository.UserRepository
 import com.isuo.inspection.application.utils.Event
-import com.orhanobut.logger.Logger
-import io.reactivex.Single
-import io.reactivex.rxkotlin.toObservable
 import retrofit2.Call
-import kotlin.collections.ArrayList
 
 class MainViewModel(
     private val taskRepository: TaskRepository
@@ -29,8 +23,6 @@ class MainViewModel(
     var count1Str: MutableLiveData<String> = MutableLiveData("-")
     var count2Str: MutableLiveData<String> = MutableLiveData("-")
     var count3Str: MutableLiveData<String> = MutableLiveData("-")
-
-    var searchText: MutableLiveData<String> = MutableLiveData()
 
     var dataList = ArrayList<SubstationBean>()
 
@@ -62,7 +54,7 @@ class MainViewModel(
         val cell1: Call<BaseEntity<HomePageBean>> = taskRepository.getHomePage()
         okHttpManager1.requestData(cell1, {
             requestState.value = ConstantInt.REQUEST_STATE_DATA
-            it?.let {
+            if (it != null) {
                 count1Str.value = it.substationCount.toString()
                 count2Str.value = it.equipmentCount.toString()
                 count3Str.value = it.dataCount.toString()
@@ -70,11 +62,19 @@ class MainViewModel(
                     dataList.add(SubstationBean(bean.substationId, bean.substationName, bean))
                 }
             }
+            if (dataList.isEmpty()) {
+                requestState.value = ConstantInt.REQUEST_STATE_EMPTY
+                _showSubList.value = Event(dataList)
+            } else {
+                _showSubList.value = Event(dataList)
+            }
+        }, {
+            requestState.value = ConstantInt.REQUEST_STATE_EMPTY
+            toastStr.value = it
             _showSubList.value = Event(dataList)
         }, {
-            requestState.value = ConstantInt.REQUEST_STATE_DATA
-            toastStr.value = it
-            _showSubList.value = null
+            requestState.value = ConstantInt.REQUEST_STATE_ERROR
+            _showSubList.value = Event(dataList)
         })
     }
 

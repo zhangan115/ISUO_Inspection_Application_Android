@@ -81,7 +81,7 @@
                                 android:layout_marginLeft="15dp"
                                 android:layout_marginBottom="10dp"
                                 android:orientation="horizontal"
-                                android:visibility="@{viewModel.showPositionView?View.VISIBLE:View.GONE}">
+                                android:visibility="@{viewModel.showMeasuringView?View.VISIBLE:View.GONE}">
 
                                 <TextView
                                     android:layout_width="wrap_content"
@@ -93,7 +93,7 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="@{viewModel.checkPosition}"
+                                    android:text="@{viewModel.measuringName}"
                                     android:textColor="#ffeab602"
                                     android:textSize="15sp"
                                     tools:text="开关柜超声波局放检测" />
@@ -171,7 +171,7 @@
                                 android:layout_marginLeft="15dp"
                                 android:layout_marginBottom="10dp"
                                 android:orientation="horizontal"
-                                android:visibility="@{viewModel.showPositionView?View.VISIBLE:View.GONE}">
+                                android:visibility="@{viewModel.showMeasuringView?View.VISIBLE:View.GONE}">
 
                                 <TextView
                                     android:layout_width="wrap_content"
@@ -183,7 +183,7 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="@{viewModel.checkPosition}"
+                                    android:text="@{viewModel.measuringName}"
                                     android:textColor="#ffeab602"
                                     android:textSize="15sp"
                                     tools:text="开关柜超声波局放检测" />
