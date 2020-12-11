@@ -68,7 +68,7 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="@{viewModel.checkType}"
+                                    android:text="@{viewModel.checkName}"
                                     android:textColor="#ffeab602"
                                     android:textSize="15sp"
                                     tools:text="开关柜超声波局放检测" />
@@ -158,7 +158,7 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="@{viewModel.checkType}"
+                                    android:text="@{viewModel.checkName}"
                                     android:textColor="#ffeab602"
                                     android:textSize="15sp"
                                     tools:text="开关柜超声波局放检测" />

@@ -5,17 +5,16 @@ import androidx.lifecycle.ViewModel
 import com.isuo.inspection.application.model.api.OkHttpManager
 import com.isuo.inspection.application.model.bean.*
 import com.isuo.inspection.application.repository.DataRepository
-import com.isuo.inspection.application.repository.TaskRepository
 import io.reactivex.Single
 import io.reactivex.rxkotlin.toObservable
-import java.util.*
 import kotlin.collections.ArrayList
 
 class HistoryListViewModel(val repository: DataRepository) : ViewModel() {
 
     var showMeasuringView: MutableLiveData<Boolean> = MutableLiveData(true)
 
-    var checkType: MutableLiveData<String> = MutableLiveData()
+    var checkName: MutableLiveData<String> = MutableLiveData()
+    var checkType = 0
 
     var toastStr: MutableLiveData<String> = MutableLiveData()
 
@@ -38,7 +37,7 @@ class HistoryListViewModel(val repository: DataRepository) : ViewModel() {
     private var okHttpManager = OkHttpManager<String>()
     fun start() {
         val cell = repository.getHistoryData(
-            deviceId!!, checkType.value!!.toInt()
+            deviceId!!, checkType
             , null, null, null
         )
         okHttpManager.requestData(cell, {

@@ -62,14 +62,9 @@ class MainViewModel(
                     dataList.add(SubstationBean(bean.substationId, bean.substationName, bean))
                 }
             }
-            if (dataList.isEmpty()) {
-                requestState.value = ConstantInt.REQUEST_STATE_EMPTY
-                _showSubList.value = Event(dataList)
-            } else {
-                _showSubList.value = Event(dataList)
-            }
+            _showSubList.value = Event(dataList)
         }, {
-            requestState.value = ConstantInt.REQUEST_STATE_EMPTY
+            requestState.value = ConstantInt.REQUEST_STATE_DATA
             toastStr.value = it
             _showSubList.value = Event(dataList)
         }, {

@@ -75,7 +75,8 @@ class HistoryListFragment : BaseFragment<HistoryListDataBinding>() {
         if (checkType == 2) {
             viewModel.showMeasuringView.value = false
         }
-        viewModel.checkType.value = viewModel.nameList[checkType]
+        viewModel.checkType = checkType + 1
+        viewModel.checkName.value = viewModel.nameList[checkType]
     }
 
     private var adapter1: Type1Adapter? = null
