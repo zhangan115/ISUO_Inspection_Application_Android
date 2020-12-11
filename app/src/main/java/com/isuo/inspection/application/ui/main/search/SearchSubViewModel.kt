@@ -4,14 +4,14 @@ import android.text.Editable
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.isuo.inspection.application.base.ext.async
+import com.isuo.inspection.application.model.api.OkHttpManager
+import com.isuo.inspection.application.model.bean.BaseEntity
 import com.isuo.inspection.application.model.bean.SubstationBean
+import com.isuo.inspection.application.model.bean.SubstationNetBean
 import com.isuo.inspection.application.repository.TaskRepository
 import com.isuo.inspection.application.utils.Event
-import io.reactivex.disposables.Disposable
-import io.reactivex.rxkotlin.toObservable
-import java.util.ArrayList
-import java.util.concurrent.TimeUnit
+import retrofit2.Call
+import java.util.*
 
 class SearchSubViewModel(val taskRepository: TaskRepository) : ViewModel() {
 
@@ -25,28 +25,32 @@ class SearchSubViewModel(val taskRepository: TaskRepository) : ViewModel() {
 
     private val _showResult = MutableLiveData<Event<List<SubstationBean>>>()
     val showResult: LiveData<Event<List<SubstationBean>>> = _showResult
+    private var okHttpManager2 = OkHttpManager<ArrayList<SubstationNetBean>>()
 
     var dataList = ArrayList<SubstationBean>()
 
     private fun searchSub(text: String?) {
         dataList.clear()
-//        for (index in 0..3) {
-//            dataList.add(SubstationBean(index.toLong(), "变电站$index"))
-//        }
-        dataList.add(SubstationBean(1L, "西安沣东110kV变电站"))
-        dataList.add(SubstationBean(2L, "西安丈八110kV变电站"))
         isLoading.value = true
-        disposable = dataList.toObservable().toList().async(1000).subscribe { list ->
+        val cell1: Call<BaseEntity<ArrayList<SubstationNetBean>>> =
+            taskRepository.getSubstationList(name = text)
+        okHttpManager2.requestData(cell1, {
+            it?.let {
+                for (bean in it) {
+                    dataList.add(SubstationBean(bean.substationId, bean.substationName, bean))
+                }
+            }
             isLoading.value = false
-            _showResult.value = Event(list)
-        }
+            _showResult.value = Event(dataList)
+        }, {
+            toastStr.value = it
+            isLoading.value = false
+        })
     }
-
-    var disposable: Disposable? = null
 
     override fun onCleared() {
         super.onCleared()
-        disposable?.dispose()
+        okHttpManager2.destroyCall()
     }
 
 }

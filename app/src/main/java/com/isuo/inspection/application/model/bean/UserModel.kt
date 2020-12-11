@@ -8,15 +8,21 @@ import com.sito.tool.library.utils.SPHelper
 
 class UserModel {
 
+    var deptName: String? = null
+    var iomUserType: Int? = null
+    var checkStatus: Boolean? = null
+    var isLocked: Int? = null
+    var registerTime: Long? = null
+    var roleId: Long? = null
+    var sex: Int? = null
+    var mobile: String = ""
+    var userName: String? = null
     var userId: Long? = null
-    var userRole: String? = null
-    var username: String? = null
-    var portraitUrl: String? = null
-    var realName: String? = null
-    var userAddress: String? = null
-    var userMobile: String? = null
-    var workYear: String? = null
-    var hasPassword: Boolean = false
+    var realName: String = ""
+    var lastModifyTime: Long? = null
+    var position: String? = null
+    var userType: Int? = null
+    var headPic: String? = null
 
     companion object {
 
@@ -65,7 +71,7 @@ class UserModel {
             )
         }
 
-        fun isLogin():Boolean{
+        fun isLogin(): Boolean {
             return SPHelper.readBoolean(
                 ISUOApplication.instance,
                 ConstantStr.USER_INFO,

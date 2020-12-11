@@ -23,8 +23,13 @@
     <string name="login_hit_use_new_pass">再次请输入密码</string>
 
     <string name="list_1">无明显特征</string>
-    <string name="list_2">无明显特征</string>
-    <string name="list_3">无明显特征</string>
+    <string name="list_2">尖端放电</string>
+    <string name="list_3">悬浮放电</string>
+    <string name="list_4">沿面放电</string>
+    <string name="list_5">内部放电</string>
+    <string name="list_6">颗粒放电</string>
+    <string name="list_7">外部干扰</string>
+    <string name="list_8">其他</string>
 
     <string name="history_tabs_name">数据</string>
     <string name="chart_tabs_name">曲线</string>

@@ -10,6 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import okhttp3.ResponseBody
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 
@@ -101,9 +102,10 @@ class OkHttpManager<T> {
     }
 
     fun userLogin(successCallBack: (UserModel?) -> Unit) {
+        val jsonObject = JSONObject()
         val call =
             ISUOApplication.retrofit.create(UserApi::class.java)
-                .userLogin(name = UserModel.getUserName(), pass = UserModel.getUserPass()!!)
+                .userLogin(jsonObject.toString())
         call.enqueue(object : Callback<BaseEntity<UserModel>> {
 
             override fun onFailure(call: Call<BaseEntity<UserModel>>?, t: Throwable?) {

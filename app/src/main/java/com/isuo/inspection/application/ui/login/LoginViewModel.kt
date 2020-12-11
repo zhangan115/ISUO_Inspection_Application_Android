@@ -36,7 +36,7 @@ class LoginViewModel(private val userRepository: UserRepository) : ViewModel() {
     }
 
     private var okHttpManager = OkHttpManager<UserModel>()
-    var disposable: Disposable? = null
+
     fun toLogin() {
         if (TextUtils.isEmpty(name.value)) {
             toastStr.value = "请输入手机号码"
@@ -53,27 +53,19 @@ class LoginViewModel(private val userRepository: UserRepository) : ViewModel() {
             return
         }
         isLoading.value = true
-        disposable = arrayOf(0).toObservable()
-            .delay(2, TimeUnit.SECONDS).single(0)
-            .async().subscribe { it ->
-                isLoading.value = false
+        val cell: Call<BaseEntity<UserModel>> = userRepository.userLogin(name, pass)
+        okHttpManager.requestDataWithNotLogin(cell, {
+            isLoading.value = false
+            if (it != null) {
+                userRepository.setUserNameAndPass(userName = name, userPass = pass)
+                userRepository.saveUser(it)
                 userRepository.setLoginState(true)
                 _toLoginEvent.value = Event(Unit)
             }
-//        val cell: Call<BaseEntity<UserModel>>?
-//        cell = userRepository.userLogin(name, pass)
-//
-//        okHttpManager.requestDataWithNotLogin(cell, {
-//            isLoading.value = false
-//            if (it != null) {
-//                userRepository.saveUser(it)
-//                userRepository.setLoginState(true)
-//                _toLoginEvent.value = Event(Unit)
-//            }
-//        }, {
-//            isLoading.value = false
-//            toastStr.value = it
-//        })
+        }, {
+            isLoading.value = false
+            toastStr.value = it
+        })
     }
 
     //登陆
@@ -94,7 +86,6 @@ class LoginViewModel(private val userRepository: UserRepository) : ViewModel() {
     override fun onCleared() {
         super.onCleared()
         okHttpManager.destroyCall()
-        disposable?.dispose()
     }
 
 }

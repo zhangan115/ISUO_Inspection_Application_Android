@@ -4,5 +4,10 @@
         <item>@string/list_1</item>
         <item>@string/list_2</item>
         <item>@string/list_3</item>
+        <item>@string/list_4</item>
+        <item>@string/list_5</item>
+        <item>@string/list_6</item>
+        <item>@string/list_7</item>
+        <item>@string/list_8</item>
     </string-array>
 </resources>

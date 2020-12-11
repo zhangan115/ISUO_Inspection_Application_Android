@@ -62,7 +62,7 @@ class ViewModelFactory constructor(
             isAssignableFrom(SplashViewModel::class.java) ->
                 SplashViewModel(userRepository)
             isAssignableFrom(MainViewModel::class.java) ->
-                MainViewModel(userRepository, taskRepository)
+                MainViewModel(taskRepository)
             isAssignableFrom(ForgetPassViewModel::class.java) ->
                 ForgetPassViewModel(userRepository)
             isAssignableFrom(UserInfoViewModel::class.java) ->

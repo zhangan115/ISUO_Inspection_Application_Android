@@ -5,8 +5,7 @@ import android.text.TextUtils
 import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
 
-class SubstationBean(id: Long, name: String) {
-
+class SubstationBean(id: Long, name: String, val subBean: SubstationNetBean?) {
     val id: ObservableField<Long> = ObservableField(id)
     val name: ObservableField<String> = ObservableField(name)
 }
@@ -16,10 +15,11 @@ class SubCheckItemBean(id: Long, name: String) {
     val name: ObservableField<String> = ObservableField(name)
 }
 
-class DeviceBean(id: Long, name: String, code: String) {
+class DeviceBean(id: Long, name: String, code: String, equipmentTypeCode: Int) {
     val id: ObservableField<Long> = ObservableField(id)
     val name: ObservableField<String> = ObservableField(name)
     val code: ObservableField<String> = ObservableField(code)
+    val equipmentTypeCode: String = equipmentTypeCode.toString()
 }
 
 class InputType1 {
@@ -29,6 +29,9 @@ class InputType1 {
     val value3: ObservableField<String> = ObservableField()
     val value4: ObservableField<String> = ObservableField()
     val isFinish: MutableLiveData<Boolean> = MutableLiveData()
+
+    var positionId: Long? = null
+    var positionName: String? = null
 
     fun textChangeListener(s: Editable) {
         val text1 = value1.get()
@@ -49,6 +52,9 @@ class InputType2() {
     val chooseId: ObservableField<Int> = ObservableField()
     val isFinish: MutableLiveData<Boolean> = MutableLiveData()
 
+    var positionId: Long? = null
+    var positionName: String? = null
+
     fun textChangeListener(s: Editable) {
         val text1 = value1.get()
         val text2 = value2.get()
@@ -65,6 +71,9 @@ class InputType3() {
     val value2: ObservableField<String> = ObservableField()
 
     val isFinish: MutableLiveData<Type3StateBean> = MutableLiveData()
+
+    var positionId: Long? = null
+    var positionName: String? = null
 
     fun textChangeListener(s: Editable) {
         val text1 = value1.get()

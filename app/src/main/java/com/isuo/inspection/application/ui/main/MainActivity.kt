@@ -16,6 +16,7 @@ import com.isuo.inspection.application.common.ConstantInt
 import com.isuo.inspection.application.common.ConstantStr
 import com.isuo.inspection.application.databinding.MainDataBinding
 import com.isuo.inspection.application.model.bean.SubstationBean
+import com.isuo.inspection.application.model.bean.SubstationNetBean
 import com.isuo.inspection.application.ui.main.check_item.SubCheckItemActivity
 import com.isuo.inspection.application.ui.main.search.SearchSubActivity
 import com.isuo.inspection.application.ui.user.user_center.UserCenterActivity
@@ -51,46 +52,26 @@ class MainActivity : AbsBaseActivity<MainDataBinding>() {
         viewModel.showUserCenter.observe(this, EventObserver {
             startActivity(Intent(this, UserCenterActivity::class.java))
         })
-        refreshLayout.setOnRefreshListener {
-            getData()
-        }
-        refreshLayout.setOnLoadMoreListener {
-            loadMoreData()
-        }
-    }
-
-    private fun getData(){
-        viewModel.start().async(1000).bindLifeCycle(this).subscribe { list ->
+        viewModel.showSubList.observe(this, EventObserver {
             dataList.clear()
-            dataList.addAll(list)
-            recyclerView.adapter?.notifyDataSetChanged()
-            if (list.size<ConstantInt.PAGE_SIZE){
-                refreshLayout.finishRefreshWithNoMoreData()
-            }else{
-                refreshLayout.finishRefresh()
+            it?.let {
+                dataList.addAll(it)
             }
+            recyclerView.adapter?.notifyDataSetChanged()
+            refreshLayout.finishRefreshWithNoMoreData()
+        })
+        refreshLayout.setOnRefreshListener {
+            requestData()
         }
     }
 
     override fun requestData() {
-        refreshLayout.autoRefresh()
-    }
-
-    private fun loadMoreData() {
-        viewModel.loadMore().async(1000).bindLifeCycle(this).subscribe { list ->
-            dataList.addAll(list)
-            recyclerView.adapter?.notifyDataSetChanged()
-            if (list.size < ConstantInt.PAGE_SIZE) {
-                refreshLayout.finishLoadMoreWithNoMoreData()
-            } else {
-                refreshLayout.finishRefresh()
-            }
-        }
+        viewModel.start()
     }
 
     override fun initData(savedInstanceState: Bundle?) {
         dataBinding.viewModel = viewModel
-        viewModel.requestState.value = ConstantInt.REQUEST_STATE_DATA
+        viewModel.requestState.value = ConstantInt.REQUEST_STATE_LOADING
     }
 
     override fun getContentView(): Int {

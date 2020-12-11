@@ -4,26 +4,31 @@ import android.text.Editable
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.isuo.inspection.application.common.ConstantInt
+import com.isuo.inspection.application.model.api.OkHttpManager
+import com.isuo.inspection.application.model.bean.BaseEntity
+import com.isuo.inspection.application.model.bean.HomePageBean
 import com.isuo.inspection.application.model.bean.SubstationBean
+import com.isuo.inspection.application.model.bean.SubstationNetBean
 import com.isuo.inspection.application.repository.TaskRepository
 import com.isuo.inspection.application.repository.UserRepository
 import com.isuo.inspection.application.utils.Event
+import com.orhanobut.logger.Logger
 import io.reactivex.Single
-import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.toObservable
-import java.util.*
+import retrofit2.Call
+import kotlin.collections.ArrayList
 
 class MainViewModel(
-    private val userRepository: UserRepository,
     private val taskRepository: TaskRepository
 ) : ViewModel() {
 
     var toastStr: MutableLiveData<String> = MutableLiveData()
     var requestState: MutableLiveData<Int> = MutableLiveData()
 
-    var count1Str: MutableLiveData<String> = MutableLiveData("2")
-    var count2Str: MutableLiveData<String> = MutableLiveData("8")
-    var count3Str: MutableLiveData<String> = MutableLiveData("1120")
+    var count1Str: MutableLiveData<String> = MutableLiveData("-")
+    var count2Str: MutableLiveData<String> = MutableLiveData("-")
+    var count3Str: MutableLiveData<String> = MutableLiveData("-")
 
     var searchText: MutableLiveData<String> = MutableLiveData()
 
@@ -47,29 +52,35 @@ class MainViewModel(
         _showSearchSub.value = Event(Unit)
     }
 
-    var disposable: Disposable? = null
+    private var okHttpManager1 = OkHttpManager<HomePageBean>()
 
-    fun start(): Single<List<SubstationBean>> {
+    private val _showSubList = MutableLiveData<Event<List<SubstationBean>?>>()
+    val showSubList: LiveData<Event<List<SubstationBean>?>> = _showSubList
+
+    fun start() {
         dataList.clear()
-//        for (index in 0..10) {
-//            dataList.add(SubstationBean(index.toLong(), "变电站$index"))
-//        }
-        dataList.add(SubstationBean(1L, "西安沣东110kV变电站"))
-        dataList.add(SubstationBean(2L, "西安丈八110kV变电站"))
-        return dataList.toObservable().toList()
-    }
-
-    fun loadMore(): Single<List<SubstationBean>> {
-        val oldSize = dataList.size
-//        for (index in 0..10) {
-//            dataList.add(SubstationBean((oldSize + index).toLong(), "变电站" + (oldSize + index)))
-//        }
-        return dataList.toObservable().toList()
+        val cell1: Call<BaseEntity<HomePageBean>> = taskRepository.getHomePage()
+        okHttpManager1.requestData(cell1, {
+            requestState.value = ConstantInt.REQUEST_STATE_DATA
+            it?.let {
+                count1Str.value = it.substationCount.toString()
+                count2Str.value = it.equipmentCount.toString()
+                count3Str.value = it.dataCount.toString()
+                for (bean in it.substationList) {
+                    dataList.add(SubstationBean(bean.substationId, bean.substationName, bean))
+                }
+            }
+            _showSubList.value = Event(dataList)
+        }, {
+            requestState.value = ConstantInt.REQUEST_STATE_DATA
+            toastStr.value = it
+            _showSubList.value = null
+        })
     }
 
     override fun onCleared() {
         super.onCleared()
-        disposable?.dispose()
+        okHttpManager1.destroyCall()
     }
 
 }

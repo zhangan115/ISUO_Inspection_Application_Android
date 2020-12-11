@@ -40,7 +40,7 @@ class UserCenterActivity : AbsBaseActivity<UserCenterDataBinding>() {
         })
         val user = ISUOApplication.instance.getCurrentUser()
         user?.let {
-            viewModel.userImageUrl.value = it.portraitUrl
+            viewModel.userImageUrl.value = it.headPic
         }
         viewModel.toShowUserPhoto.observe(this, EventObserver {
             if (user != null) {

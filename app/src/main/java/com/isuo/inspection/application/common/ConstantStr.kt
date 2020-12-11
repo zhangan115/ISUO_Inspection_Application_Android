@@ -85,7 +85,7 @@ interface ConstantStr {
         const val KEY_ID = "key_id"
         const val KEY_TITLE = "key_title"
         const val SUCCESS = 0
-        const val TIMEOUT = -100
+        const val TIMEOUT = 1001
         const val ERROR_PASS = -101
         const val CLOSE_WORK = "close_work"
         const val SEND_DATA = "send_data"

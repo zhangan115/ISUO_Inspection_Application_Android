@@ -11,7 +11,9 @@ import com.isuo.inspection.application.base.AbsBaseActivity
 import com.isuo.inspection.application.base.ext.getViewModelFactory
 import com.isuo.inspection.application.common.ConstantStr
 import com.isuo.inspection.application.databinding.SearchSubDataBinding
+import com.isuo.inspection.application.model.api.OkHttpManager
 import com.isuo.inspection.application.model.bean.SubstationBean
+import com.isuo.inspection.application.model.bean.SubstationNetBean
 import com.isuo.inspection.application.ui.main.check_item.SubCheckItemActivity
 import com.isuo.inspection.application.utils.EventObserver
 import kotlinx.android.synthetic.main.activity_search_sub.*

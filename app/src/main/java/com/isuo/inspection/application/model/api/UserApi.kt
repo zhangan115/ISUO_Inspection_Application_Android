@@ -12,22 +12,9 @@ interface UserApi {
     /**
      * 登录
      */
-    @FormUrlEncoded
-    @POST("/login")
-    fun userLogin(
-        @Field("username") name: String,
-        @Field("password") pass: String
-    ): Call<BaseEntity<UserModel>>
-
-    /**
-     * 验证码登录
-     */
-    @FormUrlEncoded
-    @POST("/login_by_code")
-    fun userLoginByCode(
-        @Field("mobile") name: String,
-        @Field("code") pass: String
-    ): Call<BaseEntity<UserModel>>
+    @Headers("Content-Type:application/json;charset=utf-8", "Accept:application/json;")
+    @POST("user/login.json")
+    fun userLogin(@Body json: String): Call<BaseEntity<UserModel>>
 
     /**
      * 修改用户密码（app）

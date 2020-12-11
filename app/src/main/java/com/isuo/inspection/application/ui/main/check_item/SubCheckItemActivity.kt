@@ -33,7 +33,10 @@ class SubCheckItemActivity : AbsBaseActivity<CheckItemDataBinding>() {
         adapter.setOnItemClickListener { _, _, position ->
             val intent = Intent(this, DeviceListActivity::class.java)
             intent.putExtra(ConstantStr.KEY_BUNDLE_LONG, dataList[position].id.get())
+            intent.putExtra(ConstantStr.KEY_BUNDLE_LONG_1, subBeanId)
             intent.putExtra(ConstantStr.KEY_BUNDLE_STR, dataList[position].name.get())
+            intent.putExtra(ConstantStr.KEY_BUNDLE_LONG_2, subBeanId)
+            intent.putExtra(ConstantStr.KEY_BUNDLE_STR_2, subBeanName)
             startActivity(intent)
         }
     }

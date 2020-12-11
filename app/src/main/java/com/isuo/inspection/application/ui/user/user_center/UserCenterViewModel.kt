@@ -3,6 +3,7 @@ package com.isuo.inspection.application.ui.user.user_center
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.isuo.inspection.application.app.ISUOApplication
 import com.isuo.inspection.application.repository.UserRepository
 import com.isuo.inspection.application.utils.Event
 
@@ -10,8 +11,10 @@ class UserCenterViewModel(val repository: UserRepository) : ViewModel() {
 
     var toastStr: MutableLiveData<String> = MutableLiveData()
 
-    var userName: MutableLiveData<String> = MutableLiveData("张三")
-    var userPhone: MutableLiveData<String> = MutableLiveData("18509259203")
+    var userName: MutableLiveData<String> =
+        MutableLiveData(ISUOApplication.instance.userRepository.getUser().realName)
+    var userPhone: MutableLiveData<String> =
+        MutableLiveData(ISUOApplication.instance.userRepository.getUser().mobile)
     var userImageUrl: MutableLiveData<String> = MutableLiveData()
 
     private val _toShowUserInfo = MutableLiveData<Event<Unit>>()

@@ -8,6 +8,7 @@ import com.isuo.inspection.application.model.bean.BaseEntity
 import com.isuo.inspection.application.model.bean.UserModel
 import com.isuo.inspection.application.model.api.UserApi
 import com.sito.tool.library.utils.SPHelper
+import org.json.JSONObject
 import retrofit2.Call
 
 class UserRepository(private val content: Context) {
@@ -19,7 +20,10 @@ class UserRepository(private val content: Context) {
      */
     fun userLogin(userName: String, userPass: String): Call<BaseEntity<UserModel>> {
         val remote = ISUOApplication.retrofit.create(UserApi::class.java)
-        return remote.userLogin(name = userName, pass = userPass)
+        val jsonObject = JSONObject()
+        jsonObject.put("username", userName)
+        jsonObject.put("password", userPass)
+        return remote.userLogin(json = jsonObject.toString())
     }
 
     /**
@@ -62,6 +66,15 @@ class UserRepository(private val content: Context) {
     fun saveUser(user: UserModel) {
         mUser = user
         SPHelper.write(content, ConstantStr.USER_INFO, ConstantStr.USER_DATA, Gson().toJson(user))
+    }
+
+    /**
+     * 获取用户信息
+     */
+    fun getUser(): UserModel {
+        if (mUser != null) return mUser!!
+        val jsonStr = SPHelper.readString(content, ConstantStr.USER_INFO, ConstantStr.USER_DATA)
+        return Gson().fromJson(jsonStr, UserModel::class.java)
     }
 
 
