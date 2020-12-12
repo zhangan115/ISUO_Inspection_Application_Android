@@ -138,7 +138,7 @@
                             android:layout_marginRight="16dp"
                             android:layout_weight="1"
                             android:drawableRight="@mipmap/icon_next"
-                            android:text="当前版本"
+                            android:text="@{viewModel.currentVersion}"
                             android:textColor="@color/text_title"
                             android:textSize="14sp" />
 

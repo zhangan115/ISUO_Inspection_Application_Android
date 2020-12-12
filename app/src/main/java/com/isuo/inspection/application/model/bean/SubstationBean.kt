@@ -121,13 +121,11 @@ data class Type2Data(
 data class Type3Data(
     val id: Long,
     val time: Long,
-    val value1: String?,
-    val value2: String?,
-    val positionText: String?
+    val items: ArrayList<Type3ItemBean>
 )
 
 data class Type3ItemBean(
-    val value1: String,
-    val value2: String,
-    val positionText: String
+    val value1: String?,
+    val value2: String?,
+    val positionText: String?
 )

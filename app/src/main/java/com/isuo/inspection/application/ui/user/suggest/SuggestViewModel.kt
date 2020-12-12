@@ -7,6 +7,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.isuo.inspection.application.repository.UserRepository
 import com.isuo.inspection.application.utils.Event
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.rxkotlin.toObservable
+import java.util.concurrent.TimeUnit
 
 class SuggestViewModel(userRepository: UserRepository) : ViewModel() {
 
@@ -20,11 +24,17 @@ class SuggestViewModel(userRepository: UserRepository) : ViewModel() {
 
     private val _toSub = MutableLiveData<Event<Unit>>()
     val toSub: LiveData<Event<Unit>> = _toSub
-
+    private var disposable: Disposable? = null
     fun toSub() {
-        toastStr.value = "提交成功"
-
-        _toSub.value = Event(Unit)
+        disposable = arrayOf(0).toObservable()
+            .delay(2, TimeUnit.SECONDS)
+            .observeOn(
+                AndroidSchedulers.mainThread()
+            )
+            .subscribe {
+                toastStr.value = "提交成功"
+                _toSub.value = Event(Unit)
+            }
     }
 
     fun textChange(s: Editable) {
@@ -38,4 +48,8 @@ class SuggestViewModel(userRepository: UserRepository) : ViewModel() {
 
     }
 
+    override fun onCleared() {
+        super.onCleared()
+        disposable?.dispose()
+    }
 }

@@ -73,10 +73,20 @@ object ImageViewAttrAdapter {
                 imageView,
                 holderDrawable
             )
-        } else {
+        }else if (url.startsWith("/")) {
+            val host = ISUOApplication.appHost().replace("api/","")
+            val  newUrl = url.replaceFirst("/","")
             GlideUtils.ShowCircleImageWithContext(
                 imageView.context,
-                ISUOApplication.appHost() + url,
+                host + newUrl,
+                imageView,
+                holderDrawable
+            )
+        } else {
+            val host = ISUOApplication.appHost().replace("api/","")
+            GlideUtils.ShowCircleImageWithContext(
+                imageView.context,
+                host + url,
                 imageView,
                 holderDrawable
             )

@@ -1,15 +1,24 @@
 package com.isuo.inspection.application.ui.user.user_center
 
+import android.text.TextUtils
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.isuo.inspection.application.app.ISUOApplication
+import com.isuo.inspection.application.common.ConstantInt
+import com.isuo.inspection.application.common.ConstantStr
+import com.isuo.inspection.application.model.api.OkHttpManager
+import com.isuo.inspection.application.model.bean.AppVersion
+import com.isuo.inspection.application.model.bean.UserModel
 import com.isuo.inspection.application.repository.UserRepository
 import com.isuo.inspection.application.utils.Event
+import java.io.File
 
 class UserCenterViewModel(val repository: UserRepository) : ViewModel() {
 
     var toastStr: MutableLiveData<String> = MutableLiveData()
+
+    var currentVersion: MutableLiveData<String> = MutableLiveData(ConstantStr.CURRENT_VERSION)
 
     var userName: MutableLiveData<String> =
         MutableLiveData(ISUOApplication.instance.userRepository.getUser().realName)
@@ -24,6 +33,20 @@ class UserCenterViewModel(val repository: UserRepository) : ViewModel() {
         _toShowUserInfo.value = Event(Unit)
     }
 
+    private var okHttpManager = OkHttpManager<UserModel>()
+
+    fun toUploadUserPhoto(file: File) {
+        okHttpManager.requestData(repository.uploadUserImage(file), {
+            it?.let {
+                toastStr.value = "修改成功"
+                repository.saveUser(it)
+                userImageUrl.value = it.headPic
+            }
+        }, {
+            toastStr.value = it
+        })
+    }
+
     private val _toChangePass = MutableLiveData<Event<Unit>>()
     val toChangePass: LiveData<Event<Unit>> = _toChangePass
 
@@ -31,12 +54,24 @@ class UserCenterViewModel(val repository: UserRepository) : ViewModel() {
         _toChangePass.value = Event(Unit)
     }
 
-    private val _toCheckNewVersion = MutableLiveData<Event<Unit>>()
-    val toCheckNewVersion: LiveData<Event<Unit>> = _toCheckNewVersion
+    private val _toCheckNewVersion = MutableLiveData<Event<AppVersion>>()
+    val toCheckNewEvenVersion: LiveData<Event<AppVersion>> = _toCheckNewVersion
+    private var okHttpManagerVersion = OkHttpManager<AppVersion>()
 
     fun toCheckNewVersion() {
-        toastStr.value = "当前为最新版本"
-        _toCheckNewVersion.value = Event(Unit)
+        val cell = repository.appVersion()
+        okHttpManagerVersion.requestData(cell, {
+            it?.let {
+                if (it.newVersion > ConstantInt.VERSION) {
+                    _toCheckNewVersion.value = Event(it)
+                } else {
+                    toastStr.value = "当前为最新版本"
+                }
+            }
+        }, {
+            toastStr.value = it
+        })
+
     }
 
     private val _toSuggest = MutableLiveData<Event<Unit>>()
@@ -45,6 +80,20 @@ class UserCenterViewModel(val repository: UserRepository) : ViewModel() {
 
     fun toSuggest() {
         _toSuggest.value = Event(Unit)
+    }
+
+    private val _toExitEvent = MutableLiveData<Event<Unit>>()
+    val toExitEvent: LiveData<Event<Unit>> = _toExitEvent
+    private val logoutManager = OkHttpManager<String>()
+
+    fun userExit() {
+        logoutManager.requestData(repository.userLogout(), {
+            repository.cleanUserInfo()
+            _toExitEvent.value = Event(Unit)
+        }, {
+            repository.cleanUserInfo()
+            _toExitEvent.value = Event(Unit)
+        })
     }
 
     private val _toExitApp = MutableLiveData<Event<Unit>>()
@@ -61,8 +110,16 @@ class UserCenterViewModel(val repository: UserRepository) : ViewModel() {
         _toShowUserPhoto.value = Event(Unit)
     }
 
+    /**
+     * 忽略本次版本更新
+     */
+    fun ignoreVersion(app: AppVersion) {
+        repository.setIgnoreVersion(app.newVersion)
+    }
 
     override fun onCleared() {
         super.onCleared()
+        okHttpManagerVersion.destroyCall()
+        okHttpManager.destroyCall()
     }
 }

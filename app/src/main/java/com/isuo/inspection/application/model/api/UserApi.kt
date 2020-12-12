@@ -3,6 +3,7 @@ package com.isuo.inspection.application.model.api
 import com.isuo.inspection.application.model.bean.AppVersion
 import com.isuo.inspection.application.model.bean.BaseEntity
 import com.isuo.inspection.application.model.bean.UserModel
+import okhttp3.MultipartBody
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.*
@@ -20,35 +21,21 @@ interface UserApi {
      * 修改用户密码（app）
      */
     @Headers("Content-Type:application/json;charset=utf-8", "Accept:application/json;")
-    @POST("user/edit/password")
+    @POST("user/password/update.json")
     fun userChangePass(@Body json: String): Call<BaseEntity<String>>
-
-    /**
-     * 获取手机验证码
-     */
-    @Headers("Content-Type:application/json;charset=utf-8", "Accept:application/json;")
-    @POST("user/send/vcode")
-    fun getPhoneCode(@Body json: String): Call<BaseEntity<String>>
-
-    /**
-     *用户详情
-     */
-    @Headers("Content-Type:application/json;charset=utf-8", "Accept:application/json;")
-    @POST("/user/get")
-    fun getUserDetail(@Body json: String): Call<BaseEntity<UserModel>>
 
     /**
      *修改用户
      */
     @Headers("Content-Type:application/json;charset=utf-8", "Accept:application/json;")
-    @POST("/user/edit")
+    @POST("user/update.json")
     fun editUser(@Body json: String): Call<BaseEntity<UserModel>>
 
     /**
      * 账号退出
      */
     @Headers("Content-Type:application/json;charset=utf-8", "Accept:application/json;")
-    @POST("/logout")
+    @POST("user/logout.json")
     fun logout(): Call<BaseEntity<String>>
 
 
@@ -59,25 +46,22 @@ interface UserApi {
     fun loadPdfFile(@Url fileUrl: String): Call<ResponseBody>
 
     /**
-     * 绑定客户cid 推送
-     * @param cid
-     * @return
-     */
-    @Headers(
-        "Content-Type:application/json;charset=utf-8",
-        "Accept:application/json;"
-    )
-    @POST("/user/bind_cid")
-    fun postCid(@Body json: String): Call<BaseEntity<String>>
-
-    /**
      * app更新
      */
     @Headers(
         "Content-Type:application/json;charset=utf-8",
         "Accept:application/json;"
     )
-    @POST("/update/appVersion")
+    @POST("system/getVersion.json")
     fun appVersion(@Body json: String): Call<BaseEntity<AppVersion>>
+
+    /**
+     * 上传用户图像
+     */
+    @POST("user/headpic/upload2.json")
+    @Multipart
+    fun postUserPhoto(
+        @Part partList: List<MultipartBody.Part>
+    ): Call<BaseEntity<UserModel>>
 
 }

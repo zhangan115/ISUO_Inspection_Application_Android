@@ -73,10 +73,21 @@ fun BaseActivity.showChoosePhotoDialog(
                                     R.mipmap.emptyimg
                                 )
                             }
-                            else -> {
+                            photoUrl.startsWith("/") -> {
+                                val host = ISUOApplication.appHost().replace("api/", "")
+                                val newUrl = photoUrl.replaceFirst("/", "")
                                 ShowPhotoListActivity.startActivity(
                                     this@showChoosePhotoDialog,
-                                    ISUOApplication.appHost() + photoUrl,
+                                    host + newUrl,
+                                    0,
+                                    R.mipmap.emptyimg
+                                )
+                            }
+                            else -> {
+                                val host = ISUOApplication.appHost().replace("api/", "")
+                                ShowPhotoListActivity.startActivity(
+                                    this@showChoosePhotoDialog,
+                                    host + photoUrl,
                                     0,
                                     R.mipmap.emptyimg
                                 )

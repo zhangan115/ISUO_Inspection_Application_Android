@@ -110,11 +110,8 @@ public class Type3Adapter extends BaseExpandableListAdapter {
         if (convertView == null) {
             holder = new ChildViewHolder();
             convertView = LayoutInflater.from(context).inflate(childLayout, null);
-            holder.value1Text = convertView.findViewById(R.id.text_time);
+            holder.value1Text = convertView.findViewById(R.id.text_1);
             holder.layout = convertView.findViewById(R.id.layout);
-            holder.text1 = convertView.findViewById(R.id.text_1);
-            holder.text2 = convertView.findViewById(R.id.text_2);
-            holder.textPosition = convertView.findViewById(R.id.text_position);
             convertView.setTag(holder);
         } else {
             holder = (ChildViewHolder) convertView.getTag();
@@ -122,18 +119,10 @@ public class Type3Adapter extends BaseExpandableListAdapter {
         Type3Data bean = data.get(groupPosition).getType3DataList().get(childPosition);
         if (bean != null) {
             holder.value1Text.setText(DataUtil.timeFormat(bean.getTime(), null));
-            if (TextUtils.isEmpty(bean.getValue1())) {
-                holder.text1.setText(MessageFormat.format("AE值：{0}", ""));
-            } else {
-                holder.text1.setText(MessageFormat.format("AE值：{0}", bean.getValue1()));
-            }
-            if (TextUtils.isEmpty(bean.getValue2())) {
-                holder.text2.setText(MessageFormat.format("AE背景值：{0}", ""));
-            } else {
-                holder.text2.setText(MessageFormat.format("AE背景值：{0}", bean.getValue2()));
-            }
-            if (!TextUtils.isEmpty(bean.getPositionText())) {
-                holder.textPosition.setText(bean.getPositionText());
+            for (Type3ItemBean item : bean.getItems()) {
+                LayoutType3 view = new LayoutType3(context);
+                view.setData(item.getPositionText(), item.getValue1(), item.getValue2());
+                holder.layout.addView(view);
             }
         }
         return convertView;
@@ -158,8 +147,5 @@ public class Type3Adapter extends BaseExpandableListAdapter {
     private static class ChildViewHolder {
         TextView value1Text;
         LinearLayout layout;
-        TextView text1;
-        TextView text2;
-        TextView textPosition;
     }
 }

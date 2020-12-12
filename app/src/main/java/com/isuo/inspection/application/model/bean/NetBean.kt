@@ -81,6 +81,7 @@ class HistoryDataInfo {
     var picNode: String? = null
     var ultrasounId: Long = 0L
     var createTime: Long = 0L
+    var uploadDate: Long = 0L
 }
 
 

@@ -116,13 +116,36 @@ class HistoryListViewModel(val repository: DataRepository) : ViewModel() {
                         for ((index, data) in it.withIndex()) {
                             val list = ArrayList<Type3Data>()
                             if (data.dataList != null) {
+                                val timeList = ArrayList<Long>()
                                 for (item in data.dataList!!) {
+                                    var canAdd = true
+                                    for (time in timeList) {
+                                        if (time == item.uploadDate) {
+                                            canAdd = false
+                                            break
+                                        }
+                                    }
+                                    if (canAdd) {
+                                        timeList.add(item.uploadDate)
+                                    }
+                                }
+                                val type3ItemList = ArrayList<Type3ItemBean>()
+                                for (time in timeList) {
+                                    for (item in data.dataList!!) {
+                                        if (item.uploadDate == time) {
+                                            type3ItemList.add(
+                                                Type3ItemBean(
+                                                    item.peakValue,
+                                                    item.backgroundPeakValue,
+                                                    item.positionName
+                                                )
+                                            )
+                                        }
+                                    }
                                     val bean = Type3Data(
-                                        item.ultrasounId,
-                                        item.createTime,
-                                        item.peakValue,
-                                        item.backgroundPeakValue,
-                                        item.positionName,
+                                        0,
+                                        time,
+                                        type3ItemList
                                     )
                                     list.add(bean)
                                 }

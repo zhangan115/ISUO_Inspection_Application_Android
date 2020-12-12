@@ -3,6 +3,7 @@ package com.isuo.inspection.application.ui.user.user_info
 import android.os.Bundle
 import androidx.activity.viewModels
 import com.isuo.inspection.application.R
+import com.isuo.inspection.application.app.ISUOApplication
 import com.isuo.inspection.application.base.AbsBaseActivity
 import com.isuo.inspection.application.base.ext.getViewModelFactory
 import com.isuo.inspection.application.databinding.UserInfoDataBinding
@@ -18,7 +19,11 @@ class UserInfoActivity : AbsBaseActivity<UserInfoDataBinding>() {
     }
 
     override fun initView(savedInstanceState: Bundle?) {
+        val user = ISUOApplication.instance.userRepository.getUser()
+        viewModel.name.value = user.realName
+        viewModel.phone.value = user.mobile
         viewModel.toChangePassEvent.observe(this, EventObserver {
+            setResult(RESULT_OK)
             finish()
         })
     }
