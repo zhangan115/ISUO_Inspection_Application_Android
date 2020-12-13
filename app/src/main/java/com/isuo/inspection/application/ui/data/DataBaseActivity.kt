@@ -58,11 +58,18 @@ class DataBaseActivity : AbsBaseActivity<DataBaseDataBinding>() {
             val msg = MessageEvent()
             val startTime = data?.getStringExtra(ConstantStr.KEY_BUNDLE_STR)
             val endTime = data?.getStringExtra(ConstantStr.KEY_BUNDLE_STR_1)
-            val positionId = data?.getLongExtra(ConstantStr.KEY_BUNDLE_INT, -1L)
+            val positionName = data?.getStringExtra(ConstantStr.KEY_BUNDLE_STR_2)
+            val positionId = data?.getLongExtra(ConstantStr.KEY_BUNDLE_LONG, -1L)
             if (positionId == -1L) {
-                msg.MessageEvent(ConstantStr.SEND_DATA, startTime, endTime, null)
+                msg.MessageEvent(ConstantStr.SEND_DATA, startTime, endTime, null, positionName)
             } else {
-                msg.MessageEvent(ConstantStr.SEND_DATA, startTime, endTime, positionId)
+                msg.MessageEvent(
+                    ConstantStr.SEND_DATA,
+                    startTime,
+                    endTime,
+                    positionId,
+                    positionName
+                )
             }
             EventBus.getDefault().postSticky(msg)
         }
@@ -76,8 +83,7 @@ class DataBaseActivity : AbsBaseActivity<DataBaseDataBinding>() {
         bundle1.putInt(ConstantStr.KEY_BUNDLE_INT, checkType)
 
         val adapter = FragmentPagerItemAdapter(
-            supportFragmentManager
-            , FragmentPagerItems.with(this)
+            supportFragmentManager, FragmentPagerItems.with(this)
                 .add(
                     getString(R.string.history_tabs_name),
                     HistoryListFragment::class.java,

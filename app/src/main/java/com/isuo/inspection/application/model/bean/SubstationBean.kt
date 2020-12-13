@@ -22,6 +22,12 @@ class DeviceBean(id: Long, name: String, code: String, equipmentTypeCode: Int) {
     val equipmentTypeCode: String = equipmentTypeCode.toString()
 }
 
+class MeasuringPointBean(id: Long, name: String,selectId:Long){
+    val id: ObservableField<Long> = ObservableField(id)
+    val name: ObservableField<String> = ObservableField(name)
+    val selectId: ObservableField<Long> = ObservableField(selectId)
+}
+
 class InputType1 {
 
     val value1: ObservableField<String> = ObservableField()

@@ -1,6 +1,5 @@
 package com.isuo.inspection.application.ui.data.chart
 
-import android.content.Context
 import android.os.Bundle
 import androidx.annotation.ColorInt
 import androidx.fragment.app.viewModels
@@ -20,11 +19,13 @@ import com.isuo.inspection.application.common.ConstantInt
 import com.isuo.inspection.application.common.ConstantStr
 import com.isuo.inspection.application.databinding.ChartDataBinding
 import com.isuo.inspection.application.model.bean.ChartBean
+import com.isuo.inspection.application.model.bean.HistoryData
+import com.isuo.inspection.application.model.bean.HistoryNetData
 import com.isuo.inspection.application.model.bean.MessageEvent
-import com.isuo.inspection.application.ui.data.DataBaseActivity
 import com.isuo.inspection.application.ui.data.chart.widget.ChartXFormatter
 import com.isuo.inspection.application.utils.ChartLabelUtils
-import com.orhanobut.logger.Logger
+import com.isuo.inspection.application.utils.EventObserver
+import com.isuo.inspection.application.utils.NumberUtils
 import kotlinx.android.synthetic.main.fragment_chart.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -44,7 +45,6 @@ class ChartFragment : BaseFragment<ChartDataBinding>() {
 
     private var deviceName: String? = null
     private var inputType: Int = 0
-    var deviceId: Long = 0L
     var checkPosition: String? = null
 
     override fun initData() {
@@ -52,17 +52,21 @@ class ChartFragment : BaseFragment<ChartDataBinding>() {
         inputType = arguments?.getInt(ConstantStr.KEY_BUNDLE_INT)!!
         deviceName = arguments?.getString(ConstantStr.KEY_BUNDLE_STR)
         checkPosition = arguments?.getString(ConstantStr.KEY_BUNDLE_STR_1)
-        inputType = arguments?.getInt(ConstantStr.KEY_BUNDLE_INT)!!
-        deviceId = arguments?.getLong(ConstantStr.KEY_BUNDLE_LONG, -1L)!!
+        viewModel.deviceId = arguments?.getLong(ConstantStr.KEY_BUNDLE_LONG, -1L)!!
         if (inputType == 2) {
             viewModel.showPositionView.value = false
         }
+        viewModel.checkType = inputType + 1
         viewModel.checkPosition.value = checkPosition
-        viewModel.checkType.value = viewModel.nameList[inputType]
+        viewModel.checkTypeName.value = viewModel.nameList[inputType]
     }
 
     override fun initView() {
-
+        viewModel.showChooseResult.observe(this, EventObserver {
+            if (it != null) {
+                dealNetData(it)
+            }
+        })
     }
 
     override fun setViewModel(dataBinding: ChartDataBinding?) {
@@ -90,112 +94,121 @@ class ChartFragment : BaseFragment<ChartDataBinding>() {
             message.positionId?.let {
                 viewModel.positionId = it
             }
-            viewModel.start(inputType).async(1000).bindLifeCycle(this).subscribe { list ->
-                val chartListData = ArrayList<ChartBean>()
-                when (inputType) {
-                    0 -> {
-                        val chart1 = ChartBean()
-                        val chart2 = ChartBean()
-                        val chart3 = ChartBean()
-                        val chart4 = ChartBean()
-
-                        val list1 = ArrayList<ChartBean.Data>()
-                        val list2 = ArrayList<ChartBean.Data>()
-                        val list3 = ArrayList<ChartBean.Data>()
-                        val list4 = ArrayList<ChartBean.Data>()
-
-                        if (list.size == 1) {
-                            for (item in list[0].type1DataList!!) {
-                                val data1 = ChartBean.Data()
-                                data1.value = item.time
-//                                data1.dataValue = item.value1.toFloat()
-                                list1.add(data1)
-                                val data2 = ChartBean.Data()
-                                data2.value = item.time
-//                                data2.dataValue = item.value2.toFloat()
-                                list2.add(data2)
-                                val data3 = ChartBean.Data()
-                                data3.value = item.time
-//                                data3.dataValue = item.value3.toFloat()
-                                list3.add(data3)
-                                val data4 = ChartBean.Data()
-                                data4.value = item.time
-//                                data4.dataValue = item.value4.toFloat()
-                                list4.add(data4)
-                            }
-
-                            chart1.data = list1
-                            chart2.data = list2
-                            chart3.data = list3
-                            chart4.data = list4
-
-                            chartListData.add(chart1)
-                            chartListData.add(chart2)
-                            chartListData.add(chart3)
-                            chartListData.add(chart4)
-                        }
-                    }
-                    1 -> {
-                        val chart1 = ChartBean()
-                        val chart2 = ChartBean()
-
-                        val list1 = ArrayList<ChartBean.Data>()
-                        val list2 = ArrayList<ChartBean.Data>()
-
-                        if (list.size == 1) {
-                            for (item in list[0].type2DataList!!) {
-                                val data1 = ChartBean.Data()
-                                data1.value = item.time
-//                                data1.dataValue = item.value1.toFloat()
-                                list1.add(data1)
-                                val data2 = ChartBean.Data()
-                                data2.value = item.time
-//                                data2.dataValue = item.value2.toFloat()
-                                list2.add(data2)
-                            }
-
-                            chart1.data = list1
-                            chart2.data = list2
-
-                            chartListData.add(chart1)
-                            chartListData.add(chart2)
-                        }
-                    }
-                    else -> {
-                        val chart1 = ChartBean()
-                        val chart2 = ChartBean()
-
-                        val list1 = ArrayList<ChartBean.Data>()
-                        val list2 = ArrayList<ChartBean.Data>()
-
-                        if (list.size == 1) {
-                            for (item in list[0].type3DataList!!) {
-                                val data1 = ChartBean.Data()
-//                                data1.dataValue = item.items[0].value1.toFloat()
-                                data1.value = item.time
-                                list1.add(data1)
-                                val data2 = ChartBean.Data()
-//                                data2.dataValue = item.items[0].value2.toFloat()
-                                data2.value = item.time
-                                list2.add(data2)
-                            }
-
-                            chart1.data = list1
-                            chart2.data = list2
-
-                            chartListData.add(chart1)
-                            chartListData.add(chart2)
-                        }
-                    }
-                }
-                showData(chartListData)
-            }
+            viewModel.positionText.value = message.positionName
+            viewModel.start()
         }
     }
 
+    private fun dealNetData(list: ArrayList<HistoryData>) {
+        val chartListData = ArrayList<ChartBean>()
+        when (inputType) {
+            0 -> {
+                val chart1 = ChartBean()
+                val chart2 = ChartBean()
+                val chart3 = ChartBean()
+                val chart4 = ChartBean()
+                val list1 = ArrayList<ChartBean.Data>()
+                val list2 = ArrayList<ChartBean.Data>()
+                val list3 = ArrayList<ChartBean.Data>()
+                val list4 = ArrayList<ChartBean.Data>()
+                if (list.size == 1) {
+                    for (item in list[0].type1DataList!!) {
+                        val data1 = ChartBean.Data()
+                        data1.value = item.time
+                        NumberUtils.getFloat(item.value1)?.let {
+                            data1.dataValue = it
+                        }
+                        list1.add(data1)
+                        val data2 = ChartBean.Data()
+                        data2.value = item.time
+                        NumberUtils.getFloat(item.value2)?.let {
+                            data2.dataValue = it
+                        }
+                        list2.add(data2)
+                        val data3 = ChartBean.Data()
+                        data3.value = item.time
+                        NumberUtils.getFloat(item.value3)?.let {
+                            data3.dataValue = it
+                        }
+                        list3.add(data3)
+                        val data4 = ChartBean.Data()
+                        data4.value = item.time
+                        NumberUtils.getFloat(item.value4)?.let {
+                            data4.dataValue = it
+                        }
+                        list4.add(data4)
+                    }
+                    chart1.data = list1
+                    chart2.data = list2
+                    chart3.data = list3
+                    chart4.data = list4
+                    chartListData.add(chart1)
+                    chartListData.add(chart2)
+                    chartListData.add(chart3)
+                    chartListData.add(chart4)
+                }
+            }
+            1 -> {
+                val chart1 = ChartBean()
+                val chart2 = ChartBean()
+                val list1 = ArrayList<ChartBean.Data>()
+                val list2 = ArrayList<ChartBean.Data>()
+                if (list.size == 1) {
+                    for (item in list[0].type2DataList!!) {
+                        val data1 = ChartBean.Data()
+                        data1.value = item.time
+                        NumberUtils.getFloat(item.value1)?.let {
+                            data1.dataValue= it
+                        }
+                        list1.add(data1)
+                        val data2 = ChartBean.Data()
+                        data2.value = item.time
+                        NumberUtils.getFloat(item.value2)?.let {
+                            data2.dataValue= it
+                        }
+                        list2.add(data2)
+                    }
+                    chart1.data = list1
+                    chart2.data = list2
+                    chartListData.add(chart1)
+                    chartListData.add(chart2)
+                }
+            }
+            else -> {
+                val chart1 = ChartBean()
+                val chart2 = ChartBean()
+                val list1 = ArrayList<ChartBean.Data>()
+                val list2 = ArrayList<ChartBean.Data>()
+                if (list.size == 1) {
+                    for (item in list[0].type3DataList!!) {
+                        val data1 = ChartBean.Data()
+                        NumberUtils.getFloat(item.items[0].value1)?.let {
+                            data1.dataValue = it
+                        }
+                        data1.value = item.time
+                        list1.add(data1)
+                        val data2 = ChartBean.Data()
+                        NumberUtils.getFloat(item.items[0].value2)?.let {
+                            data2.dataValue = it
+                        }
+                        data2.value = item.time
+                        list2.add(data2)
+                    }
+                    chart1.data = list1
+                    chart2.data = list2
+                    chartListData.add(chart1)
+                    chartListData.add(chart2)
+                }
+            }
+        }
+        showData(chartListData)
+    }
+
     private var colors = intArrayOf(
-        R.color.line_chart_color_1, R.color.line_chart_color_2
-        , R.color.line_chart_color_3, R.color.line_chart_color_4
+        R.color.line_chart_color_1,
+        R.color.line_chart_color_2,
+        R.color.line_chart_color_3,
+        R.color.line_chart_color_4
     )
 
     private fun showData(chartDataList: List<ChartBean>) {

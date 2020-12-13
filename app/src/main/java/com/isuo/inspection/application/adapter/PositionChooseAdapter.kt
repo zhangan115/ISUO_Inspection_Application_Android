@@ -4,6 +4,7 @@ import android.view.Gravity
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.isuo.inspection.application.R
+import com.isuo.inspection.application.model.bean.MeasuringPointBean
 
 object PositionChooseAdapter {
 
@@ -13,12 +14,11 @@ object PositionChooseAdapter {
     )
     fun bindPositionSelect(
         textView: TextView,
-        position: Int = 0
+        position: MeasuringPointBean
     ) {
         textView.textSize = 15f
         textView.gravity = Gravity.CENTER
-        val tag = textView.tag.toString()
-        if (position == tag.toInt()) {
+        if (position.id.get() == position.selectId.get()) {
             textView.background =
                 textView.context.resources.getDrawable(R.drawable.button_position_select, null)
             textView.setTextColor(textView.context.resources.getColor(R.color.colorWhite))

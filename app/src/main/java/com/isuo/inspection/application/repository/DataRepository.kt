@@ -24,12 +24,12 @@ class DataRepository(private val content: Context) {
         positionId?.let {
             jsonObject.put("positionId", it)
         }
-        startTime?.let {
-            jsonObject.put("startTime", startTime)
-        }
-        endTime?.let {
-            jsonObject.put("endTime", endTime)
-        }
+//        startTime?.let {
+//            jsonObject.put("startTime", startTime)
+//        }
+//        endTime?.let {
+//            jsonObject.put("endTime", endTime)
+//        }
         return remote.getHistoryData(jsonObject.toString())
     }
 

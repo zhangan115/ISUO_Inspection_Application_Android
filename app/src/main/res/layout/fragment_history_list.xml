@@ -104,7 +104,7 @@
                         <com.sito.tool.library.widget.PinnedHeaderExpandableListView
                             android:id="@+id/expandableListView"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:cacheColorHint="@null"
                             android:childDivider="@null"
                             android:childIndicatorLeft="0dp"
@@ -211,7 +211,6 @@
                 </androidx.core.widget.NestedScrollView>
 
             </RelativeLayout>
-
 
         </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 

@@ -10,8 +10,6 @@ import com.isuo.inspection.application.R
 import com.isuo.inspection.application.adapter.RVAdapter
 import com.isuo.inspection.application.app.ISUOApplication
 import com.isuo.inspection.application.base.BaseFragment
-import com.isuo.inspection.application.base.ext.async
-import com.isuo.inspection.application.base.ext.bindLifeCycle
 import com.isuo.inspection.application.base.ext.getViewModelFactory
 import com.isuo.inspection.application.common.ConstantInt
 import com.isuo.inspection.application.common.ConstantStr
@@ -42,22 +40,6 @@ class HistoryListFragment : BaseFragment<HistoryListDataBinding>() {
 
     override fun lazyLoad() {
 
-    }
-
-    private fun getData() {
-        if (viewModel.showChooseListView.value!!) {
-            getChooseData()
-        } else {
-            getNormalData()
-        }
-    }
-
-    private fun loadMoreData() {
-        if (viewModel.showChooseListView.value!!) {
-            getChooseMoreData()
-        } else {
-            getNormalMoreData()
-        }
     }
 
     override fun getContentView(): Int {
@@ -126,32 +108,73 @@ class HistoryListFragment : BaseFragment<HistoryListDataBinding>() {
             }
         }
         refreshLayout.setOnRefreshListener {
-            getData()
+            if (viewModel.showChooseListView.value!!) {
+                viewModel.getChooseData()
+            } else {
+                viewModel.start()
+            }
         }
         refreshLayout.setOnLoadMoreListener {
-            loadMoreData()
+            if (viewModel.showChooseListView.value!!) {
+                viewModel.getMoreChooseData()
+            } else {
+                viewModel.getMoreNormalData()
+            }
         }
         viewModel.showResult.observe(this, EventObserver {
-            adapter1?.setData(it)
-            adapter2?.setData(it)
-            adapter3?.setData(it)
-            for (index in 0 until expandableListView.expandableListAdapter!!.groupCount) {
-                expandableListView.expandGroup(index, false)
+            if (it != null) {
+                adapter1?.setData(it)
+                adapter2?.setData(it)
+                adapter3?.setData(it)
+                for (index in 0 until expandableListView.expandableListAdapter!!.groupCount) {
+                    expandableListView.expandGroup(index, false)
+                }
             }
-            if (it.size < ConstantInt.PAGE_SIZE) {
+            if (it == null || it.size < ConstantInt.PAGE_SIZE) {
                 refreshLayout.finishRefreshWithNoMoreData()
             } else {
                 refreshLayout.finishRefresh()
             }
         })
         viewModel.showMoreResult.observe(this, EventObserver {
-            adapter1?.addData(it)
-            adapter2?.addData(it)
-            adapter3?.addData(it)
-            for (index in 0 until expandableListView.expandableListAdapter!!.groupCount) {
-                expandableListView.expandGroup(index, false)
+            if (it != null) {
+                adapter1?.addData(it)
+                adapter2?.addData(it)
+                adapter3?.addData(it)
+                for (index in 0 until expandableListView.expandableListAdapter!!.groupCount) {
+                    expandableListView.expandGroup(index, false)
+                }
             }
-            if (it.size < ConstantInt.PAGE_SIZE) {
+            if (it == null || it.size < ConstantInt.PAGE_SIZE) {
+                refreshLayout.finishLoadMoreWithNoMoreData()
+            } else {
+                refreshLayout.finishLoadMore()
+            }
+        })
+        viewModel.showChooseResult.observe(this, EventObserver {
+            if (it != null && it.isNotEmpty()) {
+                dataType1List.clear()
+                dataType1List.addAll(it[0].type1DataList!!)
+                dataType2List.clear()
+                dataType2List.addAll(it[0].type2DataList!!)
+                dataType3List.clear()
+                dataType3List.addAll(it[0].type3DataList!!)
+            }
+            recyclerView.adapter?.notifyDataSetChanged()
+            if (it == null || it.size < ConstantInt.PAGE_SIZE) {
+                refreshLayout.finishRefreshWithNoMoreData()
+            } else {
+                refreshLayout.finishRefresh()
+            }
+        })
+        viewModel.showMoreChooseResult.observe(this, EventObserver {
+            if (it != null && it.isNotEmpty()) {
+                dataType1List.addAll(it[0].type1DataList!!)
+                dataType2List.addAll(it[0].type2DataList!!)
+                dataType3List.addAll(it[0].type3DataList!!)
+            }
+            recyclerView.adapter?.notifyDataSetChanged()
+            if (it == null || it.size < ConstantInt.PAGE_SIZE) {
                 refreshLayout.finishLoadMoreWithNoMoreData()
             } else {
                 refreshLayout.finishLoadMore()
@@ -182,6 +205,8 @@ class HistoryListFragment : BaseFragment<HistoryListDataBinding>() {
     fun onEventMainThread(message: MessageEvent) {
         if (message.message == ConstantStr.SEND_DATA) {
             viewModel.showChooseDate.value = message.startTime + "至" + message.endTime
+            viewModel.startTime = message.startTime
+            viewModel.endTime = message.endTime
             viewModel.showChooseListView.value = true
             message.positionId?.let {
                 viewModel.positionId = it
@@ -192,94 +217,6 @@ class HistoryListFragment : BaseFragment<HistoryListDataBinding>() {
             dataType3List.clear()
             refreshLayout.autoRefresh()
         }
-    }
-
-    private fun getChooseData() {
-        when (checkType) {
-            0 -> {
-                viewModel.getType1Data().async(1000).bindLifeCycle(this).subscribe { list ->
-                    this.dataType1List.clear()
-                    this.dataType1List.addAll(list)
-                    recyclerView.adapter?.notifyDataSetChanged()
-                    if (list.size < ConstantInt.PAGE_SIZE) {
-                        refreshLayout.finishRefreshWithNoMoreData()
-                    } else {
-                        refreshLayout.finishRefresh()
-                    }
-                }
-            }
-            1 -> {
-                viewModel.getType2Data().async(1000).bindLifeCycle(this).subscribe { list ->
-                    this.dataType2List.clear()
-                    this.dataType2List.addAll(list)
-                    recyclerView.adapter?.notifyDataSetChanged()
-                    if (list.size < ConstantInt.PAGE_SIZE) {
-                        refreshLayout.finishRefreshWithNoMoreData()
-                    } else {
-                        refreshLayout.finishRefresh()
-                    }
-                }
-            }
-            else -> {
-                viewModel.getType3Data().async(1000).bindLifeCycle(this).subscribe { list ->
-                    this.dataType3List.clear()
-                    this.dataType3List.addAll(list)
-                    recyclerView.adapter?.notifyDataSetChanged()
-                    if (list.size < ConstantInt.PAGE_SIZE) {
-                        refreshLayout.finishRefreshWithNoMoreData()
-                    } else {
-                        refreshLayout.finishRefresh()
-                    }
-                }
-            }
-        }
-    }
-
-    private fun getChooseMoreData() {
-        when (checkType) {
-            0 -> {
-                viewModel.getType1Data().async(1000).bindLifeCycle(this).subscribe { list ->
-                    this.dataType1List.addAll(list)
-                    recyclerView.adapter?.notifyDataSetChanged()
-                    if (list.size < ConstantInt.PAGE_SIZE) {
-                        refreshLayout.finishLoadMoreWithNoMoreData()
-                    } else {
-                        refreshLayout.finishLoadMore()
-                    }
-                }
-            }
-            1 -> {
-                viewModel.getType2Data().async(1000).bindLifeCycle(this).subscribe { list ->
-                    this.dataType2List.addAll(list)
-                    recyclerView.adapter?.notifyDataSetChanged()
-                    if (list.size < ConstantInt.PAGE_SIZE) {
-                        refreshLayout.finishLoadMoreWithNoMoreData()
-                    } else {
-                        refreshLayout.finishLoadMore()
-                    }
-                }
-            }
-            else -> {
-                viewModel.getType3Data().async(1000).bindLifeCycle(this).subscribe { list ->
-                    this.dataType3List.addAll(list)
-                    recyclerView.adapter?.notifyDataSetChanged()
-                    if (list.size < ConstantInt.PAGE_SIZE) {
-                        refreshLayout.finishLoadMoreWithNoMoreData()
-                    } else {
-                        refreshLayout.finishLoadMore()
-                    }
-                }
-            }
-        }
-
-    }
-
-    private fun getNormalData() {
-        viewModel.start()
-    }
-
-    private fun getNormalMoreData() {
-
     }
 
     class TypeList1Adapter(recyclerView: RecyclerView, data: ArrayList<Type1Data>?, layoutId: Int) :
@@ -327,11 +264,11 @@ class HistoryListFragment : BaseFragment<HistoryListDataBinding>() {
             val layout = vHolder?.getView(R.id.layout) as LinearLayout?
             layout?.removeAllViews()
             data?.let {
-//                for (item in it.items) {
-//                    val view = LayoutType3(ISUOApplication.instance)
-//                    view.setData(item.positionText, item.value1, item.value2)
-//                    layout?.addView(view)
-//                }
+                for (item in it.items) {
+                    val view = LayoutType3(ISUOApplication.instance)
+                    view.setData(item.positionText, item.value1, item.value2)
+                    layout?.addView(view)
+                }
             }
         }
     }

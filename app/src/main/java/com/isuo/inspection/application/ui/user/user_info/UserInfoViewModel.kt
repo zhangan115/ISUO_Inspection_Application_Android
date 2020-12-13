@@ -30,7 +30,7 @@ class UserInfoViewModel(val repository: UserRepository) : ViewModel() {
     private val manager = OkHttpManager<UserModel>()
 
     fun toChangePass() {
-        if (!PhoneFormatCheckUtils.isChinaPhoneLegal(phone.value)) {
+        if (!PhoneFormatCheckUtils.isPhoneLegal(phone.value)) {
             toastStr.value = "请输入合法手机号码"
             return
         }

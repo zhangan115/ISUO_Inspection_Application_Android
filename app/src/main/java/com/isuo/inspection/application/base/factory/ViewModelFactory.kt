@@ -80,9 +80,9 @@ class ViewModelFactory constructor(
             isAssignableFrom(DataBaseViewModel::class.java) ->
                 DataBaseViewModel(dataRepository)
             isAssignableFrom(DataFilterViewModel::class.java) ->
-                DataFilterViewModel()
+                DataFilterViewModel(taskRepository)
             isAssignableFrom(ChartViewModel::class.java) ->
-                ChartViewModel(taskRepository)
+                ChartViewModel(dataRepository)
             isAssignableFrom(HistoryListViewModel::class.java) ->
                 HistoryListViewModel(dataRepository)
             isAssignableFrom(SuggestViewModel::class.java) ->

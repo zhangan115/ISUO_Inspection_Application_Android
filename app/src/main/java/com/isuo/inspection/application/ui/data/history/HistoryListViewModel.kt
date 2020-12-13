@@ -38,169 +38,225 @@ class HistoryListViewModel(val repository: DataRepository) : ViewModel() {
 
     var deviceId: Long? = null
 
-    private val positionList =
-        listOf("前中", "前下", "左上", "左中", "左下", "右上", "右中", "右下", "后上", "后中", "后下")
+    private val _showResult = MutableLiveData<Event<ArrayList<HistoryData>?>>()
+    val showResult: LiveData<Event<ArrayList<HistoryData>?>> = _showResult
 
-    private val _showResult = MutableLiveData<Event<ArrayList<HistoryData>>>()
-    val showResult: LiveData<Event<ArrayList<HistoryData>>> = _showResult
-
-    private val _showMoreResult = MutableLiveData<Event<ArrayList<HistoryData>>>()
-    val showMoreResult: LiveData<Event<ArrayList<HistoryData>>> = _showMoreResult
+    private val _showMoreResult = MutableLiveData<Event<ArrayList<HistoryData>?>>()
+    val showMoreResult: LiveData<Event<ArrayList<HistoryData>?>> = _showMoreResult
 
     private var okHttpManager = OkHttpManager<ArrayList<HistoryNetData>>()
+
+    private fun getData(it: List<HistoryNetData>?): ArrayList<HistoryData> {
+        val dataList = ArrayList<HistoryData>()
+        if (it == null || it.isEmpty()) {
+            return dataList
+        }
+        when (checkType - 1) {
+            0 -> {
+                for ((index, data) in it.withIndex()) {
+                    val list = ArrayList<Type1Data>()
+                    if (data.dataList != null) {
+                        for (item in data.dataList!!) {
+                            val bean = Type1Data(
+                                item.ultrasounId,
+                                item.createTime,
+                                item.peakValue,
+                                item.backgroundPeakValue,
+                                item.frequencyComponent1,
+                                item.frequencyComponent2,
+                            )
+                            list.add(bean)
+                        }
+                    }
+                    dataList.add(
+                        HistoryData(
+                            index.toLong(),
+                            System.currentTimeMillis(),
+                            0,
+                            list,
+                            null,
+                            null
+                        )
+                    )
+                }
+            }
+            1 -> {
+                for ((index, data) in it.withIndex()) {
+                    val list = ArrayList<Type2Data>()
+                    if (data.dataList != null) {
+                        for (item in data.dataList!!) {
+                            val bean = Type2Data(
+                                item.ultrasounId,
+                                item.createTime,
+                                item.peakValue,
+                                item.backgroundPeakValue,
+                                item.picNode,
+                            )
+                            list.add(bean)
+                        }
+                    }
+                    dataList.add(
+                        HistoryData(
+                            index.toLong(),
+                            System.currentTimeMillis(),
+                            1,
+                            null,
+                            list,
+                            null
+                        )
+                    )
+                }
+            }
+            else -> {
+                for ((index, data) in it.withIndex()) {
+                    val list = ArrayList<Type3Data>()
+                    if (data.dataList != null) {
+                        val timeList = ArrayList<Long>()
+                        for (item in data.dataList!!) {
+                            var canAdd = true
+                            for (time in timeList) {
+                                if (time == item.uploadDate) {
+                                    canAdd = false
+                                    break
+                                }
+                            }
+                            if (canAdd) {
+                                timeList.add(item.uploadDate)
+                            }
+                        }
+                        val type3ItemList = ArrayList<Type3ItemBean>()
+                        for (time in timeList) {
+                            for (item in data.dataList!!) {
+                                if (item.uploadDate == time) {
+                                    type3ItemList.add(
+                                        Type3ItemBean(
+                                            item.peakValue,
+                                            item.backgroundPeakValue,
+                                            item.positionName
+                                        )
+                                    )
+                                }
+                            }
+                            val bean = Type3Data(
+                                0,
+                                time,
+                                type3ItemList
+                            )
+                            list.add(bean)
+                        }
+                    }
+                    dataList.add(
+                        HistoryData(
+                            index.toLong(),
+                            System.currentTimeMillis(),
+                            2,
+                            null,
+                            null,
+                            list
+                        )
+                    )
+                }
+            }
+        }
+        return dataList
+    }
 
     fun start() {
         val cell = repository.getHistoryData(
             deviceId!!, checkType, positionId, startTime, endTime
         )
         okHttpManager.requestData(cell, {
-            if (it != null && it.isNotEmpty()) {
-                dataList.clear()
-                when (checkType - 1) {
-                    0 -> {
-                        for ((index, data) in it.withIndex()) {
-                            val list = ArrayList<Type1Data>()
-                            if (data.dataList != null) {
-                                for (item in data.dataList!!) {
-                                    val bean = Type1Data(
-                                        item.ultrasounId,
-                                        item.createTime,
-                                        item.peakValue,
-                                        item.backgroundPeakValue,
-                                        item.frequencyComponent1,
-                                        item.frequencyComponent2,
-                                    )
-                                    list.add(bean)
-                                }
-                            }
-                            dataList.add(
-                                HistoryData(
-                                    index.toLong(),
-                                    System.currentTimeMillis(),
-                                    0,
-                                    list,
-                                    null,
-                                    null
-                                )
-                            )
-                        }
-                    }
-                    1 -> {
-                        for ((index, data) in it.withIndex()) {
-                            val list = ArrayList<Type2Data>()
-                            if (data.dataList != null) {
-                                for (item in data.dataList!!) {
-                                    val bean = Type2Data(
-                                        item.ultrasounId,
-                                        item.createTime,
-                                        item.peakValue,
-                                        item.backgroundPeakValue,
-                                        item.picNode,
-                                    )
-                                    list.add(bean)
-                                }
-                            }
-                            dataList.add(
-                                HistoryData(
-                                    index.toLong(),
-                                    System.currentTimeMillis(),
-                                    1,
-                                    null,
-                                    list,
-                                    null
-                                )
-                            )
-                        }
-                    }
-                    else -> {
-                        for ((index, data) in it.withIndex()) {
-                            val list = ArrayList<Type3Data>()
-                            if (data.dataList != null) {
-                                val timeList = ArrayList<Long>()
-                                for (item in data.dataList!!) {
-                                    var canAdd = true
-                                    for (time in timeList) {
-                                        if (time == item.uploadDate) {
-                                            canAdd = false
-                                            break
-                                        }
-                                    }
-                                    if (canAdd) {
-                                        timeList.add(item.uploadDate)
-                                    }
-                                }
-                                val type3ItemList = ArrayList<Type3ItemBean>()
-                                for (time in timeList) {
-                                    for (item in data.dataList!!) {
-                                        if (item.uploadDate == time) {
-                                            type3ItemList.add(
-                                                Type3ItemBean(
-                                                    item.peakValue,
-                                                    item.backgroundPeakValue,
-                                                    item.positionName
-                                                )
-                                            )
-                                        }
-                                    }
-                                    val bean = Type3Data(
-                                        0,
-                                        time,
-                                        type3ItemList
-                                    )
-                                    list.add(bean)
-                                }
-                            }
-                            dataList.add(
-                                HistoryData(
-                                    index.toLong(),
-                                    System.currentTimeMillis(),
-                                    2,
-                                    null,
-                                    null,
-                                    list
-                                )
-                            )
-                        }
-                    }
-                }
-                _showResult.value = Event(dataList)
-            }
+            _showResult.value = Event(getData(it))
         }, {
             toastStr.value = it
+            _showResult.value = Event(getData(null))
         })
     }
 
-    fun getType1Data(): Single<List<Type1Data>> {
-        val dataTypeList = ArrayList<Type1Data>()
-        for (i in 0..8) {
-            val bean =
-                Type1Data(i.toLong(), System.currentTimeMillis(), "0.1", "0.2", "0.3", "0.4")
-            dataTypeList.add(bean)
-        }
-        return dataTypeList.toObservable().toList()
+    fun getMoreNormalData() {
+        val cell = repository.getHistoryData(
+            deviceId!!, checkType, positionId, startTime, endTime
+        )
+        okHttpManager.requestData(cell, {
+            _showMoreResult.value = Event(getData(it))
+        }, {
+            toastStr.value = it
+            _showMoreResult.value = Event(getData(null))
+        })
     }
 
-    fun getType2Data(): Single<List<Type2Data>> {
-        val dataTypeList = ArrayList<Type2Data>()
-        for (i in 0..8) {
-            val bean =
-                Type2Data(i.toLong(), System.currentTimeMillis(), "1.1", "1.2", "1.3")
-            dataTypeList.add(bean)
-        }
-        return dataTypeList.toObservable().toList()
+    private val _showChooseResult = MutableLiveData<Event<ArrayList<HistoryData>?>>()
+    val showChooseResult: LiveData<Event<ArrayList<HistoryData>?>> = _showChooseResult
+
+    private val _showMoreChooseResult = MutableLiveData<Event<ArrayList<HistoryData>?>>()
+    val showMoreChooseResult: LiveData<Event<ArrayList<HistoryData>?>> = _showMoreChooseResult
+
+
+    fun getChooseData() {
+        val cell = repository.getHistoryData(
+            deviceId!!, checkType, positionId, startTime, endTime
+        )
+        okHttpManager.requestData(cell, { it ->
+            val data = HistoryData(
+                0L,
+                System.currentTimeMillis(),
+                checkType,
+                ArrayList(),
+                ArrayList(),
+                ArrayList()
+            )
+            for (item in getData(it)) {
+                item.type1DataList?.let {
+                    data.type1DataList?.addAll(it)
+                }
+                item.type2DataList?.let {
+                    data.type2DataList?.addAll(it)
+                }
+                item.type3DataList?.let {
+                    data.type3DataList?.addAll(it)
+                }
+            }
+            dataList.clear()
+            dataList.add(data)
+            _showChooseResult.value = Event(dataList)
+        }, {
+            toastStr.value = it
+            _showChooseResult.value = Event(getData(null))
+        })
     }
 
-    fun getType3Data(): Single<List<Type3Data>> {
-        val dataTypeList = ArrayList<Type3Data>()
-        val items = ArrayList<Type3ItemBean>()
-        if (positionId != -1L) {
-            items.add(Type3ItemBean("0.8", "0.9", positionList[positionId!!.toInt()]))
-        } else {
-            items.add(Type3ItemBean("0.8", "0.9", positionList[1]))
-        }
-        for (index in 0..10) {
-//            dataTypeList.add(Type3Data(index.toLong(), System.currentTimeMillis(), items))
-        }
-        return dataTypeList.toObservable().toList()
+    fun getMoreChooseData() {
+        val cell = repository.getHistoryData(
+            deviceId!!, checkType, positionId, startTime, endTime
+        )
+        okHttpManager.requestData(cell, { it ->
+            val data = HistoryData(
+                0L,
+                System.currentTimeMillis(),
+                checkType,
+                ArrayList(),
+                ArrayList(),
+                ArrayList()
+            )
+            for (item in getData(it)) {
+                item.type1DataList?.let {
+                    data.type1DataList?.addAll(it)
+                }
+                item.type2DataList?.let {
+                    data.type2DataList?.addAll(it)
+                }
+                item.type3DataList?.let {
+                    data.type3DataList?.addAll(it)
+                }
+            }
+            dataList.clear()
+            dataList.add(data)
+            _showChooseResult.value = Event(dataList)
+            _showMoreChooseResult.value = Event(dataList)
+        }, {
+            toastStr.value = it
+            _showMoreChooseResult.value = Event(getData(null))
+        })
     }
+
 }
