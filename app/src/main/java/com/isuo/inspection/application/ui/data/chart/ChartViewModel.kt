@@ -54,7 +54,7 @@ class ChartViewModel(val repository: DataRepository) : ViewModel() {
                                 item.peakValue,
                                 item.backgroundPeakValue,
                                 item.frequencyComponent1,
-                                item.frequencyComponent2,
+                                item.frequencyComponent2
                             )
                             list.add(bean)
                         }
@@ -81,7 +81,7 @@ class ChartViewModel(val repository: DataRepository) : ViewModel() {
                                 item.createTime,
                                 item.peakValue,
                                 item.backgroundPeakValue,
-                                item.picNode,
+                                item.picNode
                             )
                             list.add(bean)
                         }
@@ -115,8 +115,8 @@ class ChartViewModel(val repository: DataRepository) : ViewModel() {
                                 timeList.add(item.uploadDate)
                             }
                         }
-                        val type3ItemList = ArrayList<Type3ItemBean>()
                         for (time in timeList) {
+                            val type3ItemList = ArrayList<Type3ItemBean>()
                             for (item in data.dataList!!) {
                                 if (item.uploadDate == time) {
                                     type3ItemList.add(
@@ -159,7 +159,7 @@ class ChartViewModel(val repository: DataRepository) : ViewModel() {
 
     fun start() {
         val cell = repository.getHistoryData(
-            deviceId!!, checkType, positionId, startTime, endTime
+            deviceId!!,null, checkType, positionId, startTime, endTime
         )
         okHttpManager.requestData(cell, { it ->
             val data = HistoryData(

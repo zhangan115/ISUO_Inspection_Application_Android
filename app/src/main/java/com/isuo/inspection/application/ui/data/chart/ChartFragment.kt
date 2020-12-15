@@ -94,6 +94,8 @@ class ChartFragment : BaseFragment<ChartDataBinding>() {
             message.positionId?.let {
                 viewModel.positionId = it
             }
+            viewModel.startTime = message.startTime
+            viewModel.endTime = message.endTime
             viewModel.positionText.value = message.positionName
             viewModel.start()
         }

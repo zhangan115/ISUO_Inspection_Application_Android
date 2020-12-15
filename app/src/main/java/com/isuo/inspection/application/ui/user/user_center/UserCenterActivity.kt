@@ -36,7 +36,7 @@ class UserCenterActivity : AbsBaseActivity<UserCenterDataBinding>() {
 
     override fun initView(savedInstanceState: Bundle?) {
         viewModel.toShowUserInfo.observe(this, EventObserver {
-            startActivityForResult(Intent(this, UserInfoActivity::class.java), 1001)
+            startActivityForResult(Intent(this, UserInfoActivity::class.java), 10001)
         })
         viewModel.toChangePass.observe(this, EventObserver {
             startActivity(Intent(this, ForgetPassActivity::class.java))
@@ -47,8 +47,8 @@ class UserCenterActivity : AbsBaseActivity<UserCenterDataBinding>() {
         viewModel.toCheckNewEvenVersion.observe(this, EventObserver { appVersion ->
             MaterialDialog(this).show {
                 title(text = "版本更新")
-                message(text = appVersion.versionDescription)
-                if (appVersion.isUpgrade == 0) {
+                message(text = appVersion.note)
+                if (appVersion.flag == 0) {
                     negativeButton(text = "忽略", click = {
                         viewModel.ignoreVersion(appVersion)
                         it.dismiss()
@@ -87,7 +87,7 @@ class UserCenterActivity : AbsBaseActivity<UserCenterDataBinding>() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == 1001 && resultCode == Activity.RESULT_OK) {
+        if (requestCode == 10001 && resultCode == Activity.RESULT_OK) {
             val user = ISUOApplication.instance.userRepository.getUser()
             viewModel.userName.value = user.realName
             viewModel.userPhone.value = user.mobile

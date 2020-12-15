@@ -119,6 +119,7 @@ public class Type3Adapter extends BaseExpandableListAdapter {
         Type3Data bean = data.get(groupPosition).getType3DataList().get(childPosition);
         if (bean != null) {
             holder.value1Text.setText(DataUtil.timeFormat(bean.getTime(), null));
+            holder.layout.removeAllViews();
             for (Type3ItemBean item : bean.getItems()) {
                 LayoutType3 view = new LayoutType3(context);
                 view.setData(item.getPositionText(), item.getValue1(), item.getValue2());

@@ -31,7 +31,6 @@ import java.util.*
 class HistoryListFragment : BaseFragment<HistoryListDataBinding>() {
 
     var dataList = ArrayList<HistoryData>()
-
     var dataType1List = ArrayList<Type1Data>()
     var dataType2List = ArrayList<Type2Data>()
     var dataType3List = ArrayList<Type3Data>()

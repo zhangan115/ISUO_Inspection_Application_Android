@@ -62,7 +62,7 @@ class UserCenterViewModel(val repository: UserRepository) : ViewModel() {
         val cell = repository.appVersion()
         okHttpManagerVersion.requestData(cell, {
             it?.let {
-                if (it.newVersion > ConstantInt.VERSION) {
+                if (it.version > ConstantInt.VERSION) {
                     _toCheckNewVersion.value = Event(it)
                 } else {
                     toastStr.value = "当前为最新版本"
@@ -114,7 +114,7 @@ class UserCenterViewModel(val repository: UserRepository) : ViewModel() {
      * 忽略本次版本更新
      */
     fun ignoreVersion(app: AppVersion) {
-        repository.setIgnoreVersion(app.newVersion)
+        repository.setIgnoreVersion(app.version)
     }
 
     override fun onCleared() {

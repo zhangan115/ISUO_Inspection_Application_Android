@@ -38,6 +38,8 @@ class HistoryListViewModel(val repository: DataRepository) : ViewModel() {
 
     var deviceId: Long? = null
 
+    private var lastId: Long? = null
+
     private val _showResult = MutableLiveData<Event<ArrayList<HistoryData>?>>()
     val showResult: LiveData<Event<ArrayList<HistoryData>?>> = _showResult
 
@@ -51,6 +53,11 @@ class HistoryListViewModel(val repository: DataRepository) : ViewModel() {
         if (it == null || it.isEmpty()) {
             return dataList
         }
+        val historySize: Int = it.size - 1
+        if (it[historySize].dataList != null && it[historySize].dataList!!.isNotEmpty()) {
+            val dataListSize = it[historySize].dataList!!.size -1
+            lastId = it[historySize].dataList?.get(dataListSize)?.ultrasounId
+        }
         when (checkType - 1) {
             0 -> {
                 for ((index, data) in it.withIndex()) {
@@ -63,7 +70,7 @@ class HistoryListViewModel(val repository: DataRepository) : ViewModel() {
                                 item.peakValue,
                                 item.backgroundPeakValue,
                                 item.frequencyComponent1,
-                                item.frequencyComponent2,
+                                item.frequencyComponent2
                             )
                             list.add(bean)
                         }
@@ -90,7 +97,7 @@ class HistoryListViewModel(val repository: DataRepository) : ViewModel() {
                                 item.createTime,
                                 item.peakValue,
                                 item.backgroundPeakValue,
-                                item.picNode,
+                                item.picNode
                             )
                             list.add(bean)
                         }
@@ -124,8 +131,8 @@ class HistoryListViewModel(val repository: DataRepository) : ViewModel() {
                                 timeList.add(item.uploadDate)
                             }
                         }
-                        val type3ItemList = ArrayList<Type3ItemBean>()
                         for (time in timeList) {
+                            val type3ItemList = ArrayList<Type3ItemBean>()
                             for (item in data.dataList!!) {
                                 if (item.uploadDate == time) {
                                     type3ItemList.add(
@@ -163,7 +170,7 @@ class HistoryListViewModel(val repository: DataRepository) : ViewModel() {
 
     fun start() {
         val cell = repository.getHistoryData(
-            deviceId!!, checkType, positionId, startTime, endTime
+            deviceId!!, null, checkType, positionId, startTime, endTime
         )
         okHttpManager.requestData(cell, {
             _showResult.value = Event(getData(it))
@@ -175,7 +182,7 @@ class HistoryListViewModel(val repository: DataRepository) : ViewModel() {
 
     fun getMoreNormalData() {
         val cell = repository.getHistoryData(
-            deviceId!!, checkType, positionId, startTime, endTime
+            deviceId!!, lastId, checkType, positionId, startTime, endTime
         )
         okHttpManager.requestData(cell, {
             _showMoreResult.value = Event(getData(it))
@@ -194,7 +201,7 @@ class HistoryListViewModel(val repository: DataRepository) : ViewModel() {
 
     fun getChooseData() {
         val cell = repository.getHistoryData(
-            deviceId!!, checkType, positionId, startTime, endTime
+            deviceId!!, null, checkType, positionId, startTime, endTime
         )
         okHttpManager.requestData(cell, { it ->
             val data = HistoryData(
@@ -227,7 +234,7 @@ class HistoryListViewModel(val repository: DataRepository) : ViewModel() {
 
     fun getMoreChooseData() {
         val cell = repository.getHistoryData(
-            deviceId!!, checkType, positionId, startTime, endTime
+            deviceId!!, lastId, checkType, positionId, startTime, endTime
         )
         okHttpManager.requestData(cell, { it ->
             val data = HistoryData(

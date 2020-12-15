@@ -1,8 +1,8 @@
 package com.isuo.inspection.application.model.bean
 
 data class AppVersion(
-    var versionDescription: String,
-    var isUpgrade: Int,
+    var note: String,
+    var flag: Int,
     var url: String,
-    var newVersion: Int
+    var version: Int
 )

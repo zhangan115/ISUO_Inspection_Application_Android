@@ -110,12 +110,14 @@ public class Type1Adapter extends BaseExpandableListAdapter {
             holder.value2Text = convertView.findViewById(R.id.text_2);
             holder.value3Text = convertView.findViewById(R.id.text_3);
             holder.value4Text = convertView.findViewById(R.id.text_4);
+            holder.textTime = convertView.findViewById(R.id.text_time);
             convertView.setTag(holder);
         } else {
             holder = (ChildViewHolder) convertView.getTag();
         }
         Type1Data bean = Objects.requireNonNull(data.get(groupPosition).getType1DataList()).get(childPosition);
         if (bean != null) {
+            holder.textTime.setText(DataUtil.timeFormat(bean.getTime(), null));
             if (TextUtils.isEmpty(bean.getValue1())) {
                 holder.value1Text.setText(MessageFormat.format("放电峰值:{0}", ""));
             } else {
@@ -161,5 +163,6 @@ public class Type1Adapter extends BaseExpandableListAdapter {
         TextView value2Text;
         TextView value3Text;
         TextView value4Text;
+        TextView textTime;
     }
 }
