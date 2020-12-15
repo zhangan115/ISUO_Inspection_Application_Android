@@ -31,7 +31,7 @@ class ChartViewModel(val repository: DataRepository) : ViewModel() {
 
     var positionText: MutableLiveData<String> = MutableLiveData("")
 
-    var positionId :Long? = null
+    var positionId: Long? = null
     var checkType = 0
     var startTime: String? = null
     var endTime: String? = null
@@ -159,7 +159,7 @@ class ChartViewModel(val repository: DataRepository) : ViewModel() {
 
     fun start() {
         val cell = repository.getHistoryData(
-            deviceId!!,null, checkType, positionId, startTime, endTime
+            deviceId!!, null, checkType, positionId, null, startTime, endTime
         )
         okHttpManager.requestData(cell, { it ->
             val data = HistoryData(

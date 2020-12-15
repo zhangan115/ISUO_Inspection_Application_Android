@@ -3,6 +3,7 @@ package com.isuo.inspection.application.ui.data.filter
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -65,6 +66,16 @@ class DataFilterActivity : AbsBaseActivity<DataFilterDataBinding>() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.menu_finish) {
+            if (TextUtils.isEmpty(viewModel.startDate.value) || TextUtils.isEmpty(viewModel.endDate.value)) {
+                viewModel.toastStr.value = "请选择时间"
+                return false
+            }
+            if (checkType == 2) {
+                if (viewModel.position.value == -1L) {
+                    viewModel.toastStr.value = "请选择测点"
+                    return false
+                }
+            }
             val intent = Intent()
             intent.putExtra(ConstantStr.KEY_BUNDLE_STR, viewModel.startDate.value)
             intent.putExtra(ConstantStr.KEY_BUNDLE_STR_1, viewModel.endDate.value)

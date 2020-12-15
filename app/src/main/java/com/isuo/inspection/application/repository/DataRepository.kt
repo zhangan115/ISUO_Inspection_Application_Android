@@ -16,6 +16,7 @@ class DataRepository(private val content: Context) {
         lastId: Long?,
         dataType: Int,
         positionId: Long?,
+        pageSize: Int? = null,
         startTime: String? = null,
         endTime: String? = null
     ): Call<BaseEntity<ArrayList<HistoryNetData>>> {
@@ -28,6 +29,9 @@ class DataRepository(private val content: Context) {
         }
         lastId?.let {
             jsonObject.put("lastId", it)
+        }
+        pageSize?.let {
+            jsonObject.put("count", it)
         }
         startTime?.let {
             val time = DataUtil.date2TimeStamp(it, "yyyy-MM-dd")

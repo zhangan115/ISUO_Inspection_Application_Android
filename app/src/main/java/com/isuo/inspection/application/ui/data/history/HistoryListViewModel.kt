@@ -3,6 +3,7 @@ package com.isuo.inspection.application.ui.data.history
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.isuo.inspection.application.common.ConstantInt
 import com.isuo.inspection.application.model.api.OkHttpManager
 import com.isuo.inspection.application.model.bean.*
 import com.isuo.inspection.application.repository.DataRepository
@@ -170,7 +171,7 @@ class HistoryListViewModel(val repository: DataRepository) : ViewModel() {
 
     fun start() {
         val cell = repository.getHistoryData(
-            deviceId!!, null, checkType, positionId, startTime, endTime
+            deviceId!!, null, checkType, positionId, ConstantInt.PAGE_SIZE,startTime, endTime
         )
         okHttpManager.requestData(cell, {
             _showResult.value = Event(getData(it))
@@ -182,7 +183,7 @@ class HistoryListViewModel(val repository: DataRepository) : ViewModel() {
 
     fun getMoreNormalData() {
         val cell = repository.getHistoryData(
-            deviceId!!, lastId, checkType, positionId, startTime, endTime
+            deviceId!!, lastId, checkType, positionId, ConstantInt.PAGE_SIZE, startTime, endTime
         )
         okHttpManager.requestData(cell, {
             _showMoreResult.value = Event(getData(it))
@@ -201,7 +202,7 @@ class HistoryListViewModel(val repository: DataRepository) : ViewModel() {
 
     fun getChooseData() {
         val cell = repository.getHistoryData(
-            deviceId!!, null, checkType, positionId, startTime, endTime
+            deviceId!!, null, checkType, positionId, ConstantInt.PAGE_SIZE, startTime, endTime
         )
         okHttpManager.requestData(cell, { it ->
             val data = HistoryData(
@@ -234,7 +235,7 @@ class HistoryListViewModel(val repository: DataRepository) : ViewModel() {
 
     fun getMoreChooseData() {
         val cell = repository.getHistoryData(
-            deviceId!!, lastId, checkType, positionId, startTime, endTime
+            deviceId!!, lastId, checkType, positionId, ConstantInt.PAGE_SIZE, startTime, endTime
         )
         okHttpManager.requestData(cell, { it ->
             val data = HistoryData(
