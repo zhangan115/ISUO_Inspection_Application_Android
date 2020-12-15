@@ -25,7 +25,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:srlAccentColor="@color/colorPrimary"
-            app:srlEnablePreviewInEditMode="true">
+            app:srlEnablePreviewInEditMode="true"
+            app:toast="@{viewModel.toastStr}">
 
             <RelativeLayout
                 android:layout_width="match_parent"
