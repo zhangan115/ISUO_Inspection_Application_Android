@@ -60,6 +60,7 @@
             android:layout_weight="1"
             android:gravity="center_vertical"
             android:textColor="@color/text_title"
+            android:visibility="gone"
             android:textSize="13sp"
             tools:text="2020年10月" />
     </LinearLayout>

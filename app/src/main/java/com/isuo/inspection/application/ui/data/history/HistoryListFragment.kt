@@ -259,10 +259,14 @@ class HistoryListFragment : BaseFragment<HistoryListDataBinding>() {
 
         override fun showData(vHolder: ViewHolder?, data: Type3Data?, position: Int) {
             val text1: TextView? = vHolder?.getView(R.id.text_1) as TextView?
+            val text2: TextView? = vHolder?.getView(R.id.text_2) as TextView?
             text1?.text = data?.time?.let { DataUtil.timeFormat(it, null) }
             val layout = vHolder?.getView(R.id.layout) as LinearLayout?
             layout?.removeAllViews()
             data?.let {
+                if (it.items.isNotEmpty()){
+                    text2?.text = MessageFormat.format("AE背景值：{0}", it.items[0].value2)
+                }
                 for (item in it.items) {
                     val view = LayoutType3(ISUOApplication.instance)
                     view.setData(item.positionText, item.value1, item.value2)

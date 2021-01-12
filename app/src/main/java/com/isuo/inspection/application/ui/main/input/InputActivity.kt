@@ -124,6 +124,12 @@ class InputActivity : AbsBaseActivity<InputDataBinding>() {
                 val adapter = GenericQuickAdapter(
                     R.layout.item_input_type_3, viewModel.dataList3, BR.inputType3
                 )
+                viewModel.inputType3ValueChange.observe(this,Observer {
+                   val value = viewModel.inputType3Value.value
+                    viewModel.dataList3.forEach {
+                        it.value2.set(value)
+                    }
+                })
                 recyclerView.adapter = adapter
             }
         }

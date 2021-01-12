@@ -1,5 +1,6 @@
 package com.isuo.inspection.application.ui.main.input
 
+import android.text.Editable
 import android.text.TextUtils
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -30,6 +31,9 @@ class InputViewModel(var taskRepository: TaskRepository) : ViewModel() {
     var dataList2 = ArrayList<InputType2>()
     var dataList3 = ArrayList<InputType3>()
 
+    var inputType3Value: MutableLiveData<String> = MutableLiveData()
+
+
     private var okHttpManagerUpload = OkHttpManager<String>()
 
     fun submitData() {
@@ -56,6 +60,13 @@ class InputViewModel(var taskRepository: TaskRepository) : ViewModel() {
 
     private val _showInputViews = MutableLiveData<Event<Unit>>()
     val showInputViews: LiveData<Event<Unit>> = _showInputViews
+
+    private val _inputType3ValueChange = MutableLiveData<Event<Unit>>()
+    val inputType3ValueChange: LiveData<Event<Unit>> = _inputType3ValueChange
+
+    fun textChange(s: Editable) {
+        _inputType3ValueChange.value = Event(Unit)
+    }
 
     fun start() {
         measuringList.clear()

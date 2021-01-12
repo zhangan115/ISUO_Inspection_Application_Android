@@ -111,6 +111,7 @@ public class Type3Adapter extends BaseExpandableListAdapter {
             holder = new ChildViewHolder();
             convertView = LayoutInflater.from(context).inflate(childLayout, null);
             holder.value1Text = convertView.findViewById(R.id.text_1);
+            holder.value2Text = convertView.findViewById(R.id.text_2);
             holder.layout = convertView.findViewById(R.id.layout);
             convertView.setTag(holder);
         } else {
@@ -119,6 +120,9 @@ public class Type3Adapter extends BaseExpandableListAdapter {
         Type3Data bean = data.get(groupPosition).getType3DataList().get(childPosition);
         if (bean != null) {
             holder.value1Text.setText(DataUtil.timeFormat(bean.getTime(), null));
+            if (bean.getItems().size() > 0){
+                holder.value2Text.setText(MessageFormat.format("AE背景值：{0}", bean.getItems().get(0).getValue2()));
+            }
             holder.layout.removeAllViews();
             for (Type3ItemBean item : bean.getItems()) {
                 LayoutType3 view = new LayoutType3(context);
@@ -147,6 +151,7 @@ public class Type3Adapter extends BaseExpandableListAdapter {
      */
     private static class ChildViewHolder {
         TextView value1Text;
+        TextView value2Text;
         LinearLayout layout;
     }
 }
